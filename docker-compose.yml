@@ -1,8 +1,16 @@
 version: '3'
 services:
-  scheme:
+  haskell:
     container_name: haskell
     image: haskell:8.2.1
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./src:/src
+      - ./build:/build
+  leksah:
+    container_name: leksah
+    image: jamesmstone/leksah:latest
     stdin_open: true
     tty: true
     volumes:
