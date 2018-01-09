@@ -76,12 +76,13 @@ main = do
 
 --folding tree
 foldTree :: (a -> b -> b -> b) -> b -> BinaryTree a -> b
-foldTree _ Leaf = Leaf
-foldTree f (Node left index right) =
-    
+foldTree _ acc Leaf = acc
+foldTree f acc (Node left index right) =
+    foldTree f (f index (foldTree f acc left)) right
 
 mapTree' :: (a -> b) -> BinaryTree a -> BinaryTree b
-mapTree' f bt = undefined
+mapTree' f tree@(Node left index right) =
+    foldTree (\x (Node l i r) -> Node l (f i) r) index tree
 
 mapOkay' =
     if mapTree' (+1) testTree' == mapExpected
