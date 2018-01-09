@@ -8,11 +8,3 @@ services:
     volumes:
       - ./src:/src
       - ./build:/build
-  leksah:
-    container_name: leksah
-    image: jamesmstone/leksah:latest
-    stdin_open: true
-    tty: true
-    volumes:
-      - ./src:/src
-      - ./build:/build
