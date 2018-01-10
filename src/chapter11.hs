@@ -75,16 +75,11 @@ main = do
     testPostorder
 
 --folding tree
-foldTree :: (a -> b -> b -> b) -> b -> BinaryTree a -> b
+-- TODO
+foldTree :: (a -> b -> b) -> b -> BinaryTree a -> b
 foldTree _ acc Leaf = acc
 foldTree f acc (Node left index right) =
     foldTree f (f index (foldTree f acc left)) right
 
-mapTree' :: (a -> b) -> BinaryTree a -> BinaryTree b
-mapTree' f tree@(Node left index right) =
-    foldTree (\x (Node l i r) -> Node l (f i) r) index tree
-
-mapOkay' =
-    if mapTree' (+1) testTree' == mapExpected
-    then print "yup okay!"
-    else error "test failed!"
+-- phone exercise
+data DaPhone = Sommat
