@@ -127,10 +127,15 @@ findButton phone char =
     (fst . head) founded where
         founded = filter (\button -> isInfixOf [toUpper char] (snd button)) phone
 
-pressedButtons :: Phone -> ChatHistory -> [Digit]
+pressedButtons :: Phone -> ChatHistory -> [[Digit]]
 pressedButtons phone history =
-    concat $ map (\string -> map (\char -> findButton phone char) string) (dropSpaces history)
+    group . sort . concat $
+        map
+        (\string -> map (\char -> findButton phone char) string)
+        (dropSpaces history)
 
--- cellPhonesDead :: Phone -> ChatHistory -> [(Digit, Presses)]
--- cellPhonesDead phone [] = []
--- cellPhonesDead phone history = 
+cellPhonesDead :: Phone -> ChatHistory -> [(Digit, Presses)]
+cellPhonesDead phone [] = []
+cellPhonesDead phone history =
+    map (\digits -> (head digits, length digits)) digitsList where
+        digitsList = pressedButtons phone history
