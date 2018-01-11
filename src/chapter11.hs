@@ -1,3 +1,7 @@
+import Data.Char
+import Data.List
+import Data.String
+
 -- Binary tree
 data BinaryTree a =
     Leaf | Node
@@ -82,4 +86,51 @@ foldTree f acc (Node left index right) =
     foldTree f (f index (foldTree f acc left)) right
 
 -- phone exercise
-data DaPhone = Sommat
+type Digit = Char
+type Symbols = [Char]
+type PhoneButton = (Digit, Symbols)
+type Phone = [PhoneButton]
+testPhone = [
+    ('1', "1"),
+    ('2', "2ABC"),
+    ('3', "3DEF"),
+    ('4', "4GHI"),
+    ('5', "5JKL"),
+    ('6', "6MNO"),
+    ('7', "7PQRS"),
+    ('8', "8TUV"),
+    ('9', "9WXYZ"),
+    ('0', "0+_"),
+    ('*', "^"),
+    ('#', ".,")
+    ] :: Phone
+
+type ChatHistory = [String]
+convo :: ChatHistory
+convo = ["Wanna play 20 questions",
+    "Ya",
+    "U 1st haha",
+    "Lol ok. Have u ever tasted alcohol lol",
+    "Lol ya",
+    "Wow ur cool haha. Ur turn",
+    "Ok. Do u think I am pretty Lol",
+    "Lol ya",
+    "Haha thanks just making sure rofl ur turn"]
+
+type Presses = Int
+
+dropSpaces :: ChatHistory -> ChatHistory
+dropSpaces = map (\string -> filter (/= ' ') string)
+
+findButton :: Phone -> Char -> Digit
+findButton phone char =
+    (fst . head) founded where
+        founded = filter (\button -> isInfixOf [toUpper char] (snd button)) phone
+
+pressedButtons :: Phone -> ChatHistory -> [Digit]
+pressedButtons phone history =
+    concat $ map (\string -> map (\char -> findButton phone char) string) (dropSpaces history)
+
+-- cellPhonesDead :: Phone -> ChatHistory -> [(Digit, Presses)]
+-- cellPhonesDead phone [] = []
+-- cellPhonesDead phone history = 
