@@ -1,1 +1,4 @@
 /.metadata/
+.stack-work/
+hs.cabal
+*~
