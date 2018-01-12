@@ -1,6 +1,7 @@
-module Lib
-    ( someFunc
-    ) where
+module Lib (someFunc) where
+
+import qualified Chapter11.HuttonsRazor as HR
 
 someFunc :: IO ()
-someFunc = putStrLn "someFunc"
+someFunc = do 
+    putStrLn "someFunc"

@@ -1,0 +1,66 @@
+-- This file has been generated from package.yaml by hpack version 0.20.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 665ad75d2dc14f6af6f541877e641af785bd921e8d3eefa3af10da7aeae6e259
+
+name:           Haskell
+version:        0.1.0.0
+description:    Please see the README on Github at <https://github.com/githubuser/hs#readme>
+homepage:       https://github.com/githubuser/hs#readme
+bug-reports:    https://github.com/githubuser/hs/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2018 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+cabal-version:  >= 1.10
+
+extra-source-files:
+    ChangeLog.md
+    README.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/hs
+
+library
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+  exposed-modules:
+      Chapter11.HuttonsRazor
+      Chapter12
+      Lib
+  other-modules:
+      Paths_Haskell
+  default-language: Haskell2010
+
+executable Haskell-exe
+  main-is: Main.hs
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Haskell
+    , MissingH
+    , base >=4.7 && <5
+  other-modules:
+      Paths_Haskell
+  default-language: Haskell2010
+
+test-suite Haskell-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Haskell
+    , base >=4.7 && <5
+    , hspec
+  other-modules:
+      Paths_Haskell
+  default-language: Haskell2010
