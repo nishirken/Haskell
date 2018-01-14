@@ -2,6 +2,8 @@ import Test.Hspec
 import Chapter12 (notThe, replaceThe)
 import Chapter11.HuttonsRazor (Expr (Lit, Add), eval, printExpr)
 
+import Chapter15Spec
+
 main :: IO ()
 main = hspec $ do
     describe "HuttonsRazor" $ do
@@ -22,3 +24,5 @@ main = hspec $ do
         context "replaceThe" $
             it "replace the with a" $
                 replaceThe "the cow loves us" `shouldBe` "a cow loves us"
+
+    chapter15spec

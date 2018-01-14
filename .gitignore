@@ -1,6 +1,6 @@
 /.metadata/
-.stack-work/
-hs.cabal
+/.stack-work/
+/Haskell.cabal
 *~
 /.vscode/
 /.idea/
