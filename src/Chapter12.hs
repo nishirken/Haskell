@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Chapter12 where
 
 import Data.List.Utils

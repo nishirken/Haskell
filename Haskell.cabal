@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 665ad75d2dc14f6af6f541877e641af785bd921e8d3eefa3af10da7aeae6e259
+-- hash: ffaee44263811fb2feaacffc59ddf04ca9e4d3b927f908865048871e17f0633b
 
 name:           Haskell
 version:        0.1.0.0
@@ -29,7 +29,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      MissingH
+    , base >=4.7 && <5
   exposed-modules:
       Chapter11.HuttonsRazor
       Chapter12
@@ -59,6 +60,7 @@ test-suite Haskell-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Haskell
+    , MissingH
     , base >=4.7 && <5
     , hspec
   other-modules:

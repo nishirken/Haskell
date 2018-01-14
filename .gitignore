@@ -2,3 +2,5 @@
 .stack-work/
 hs.cabal
 *~
+/.vscode/
+/.idea/

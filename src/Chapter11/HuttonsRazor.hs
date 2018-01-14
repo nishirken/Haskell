@@ -1,9 +1,13 @@
-module Chapter11.HuttonsRazor where
+module Chapter11.HuttonsRazor (Expr (Lit, Add), eval, printExpr) where
 
 data Expr
     = Lit Integer
-    | Add Expr Expr
+    | Add Expr Expr deriving Show
 
 eval :: Expr -> Integer
--- eval (Add x y) = x + y
 eval (Lit x) = x
+eval (Add x y) = eval x + eval y
+
+printExpr :: Expr -> String
+printExpr (Lit x) = show x
+printExpr (Add x y) = printExpr x ++ " + " ++ printExpr y
