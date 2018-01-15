@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fe7526800d25abfee96f807ab88a1942b9e7e291d9e592109af4e0f4bdbe47bc
+-- hash: 07604b1e744b449ffbb1040511e1802b378a62ba38ceba4452871b5b7acb8b20
 
 name:           Haskell
 version:        0.1.0.0
@@ -62,6 +62,7 @@ test-suite Haskell-test
   build-depends:
       Haskell
     , MissingH
+    , QuickCheck
     , base >=4.7 && <5
     , hspec
   other-modules:
