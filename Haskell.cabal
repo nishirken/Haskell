@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 07604b1e744b449ffbb1040511e1802b378a62ba38ceba4452871b5b7acb8b20
+-- hash: 2206dc6abd04a6b6cbbe80d608e2edc14574c4ed6338a50c7faf0a50a75d7e1a
 
 name:           Haskell
 version:        0.1.0.0
@@ -35,6 +35,7 @@ library
       Chapter11.HuttonsRazor
       Chapter12
       Chapter15
+      Chapter16
       Lib
   other-modules:
       Paths_Haskell
@@ -67,5 +68,6 @@ test-suite Haskell-test
     , hspec
   other-modules:
       Chapter15Spec
+      Chapter16Spec
       Paths_Haskell
   default-language: Haskell2010

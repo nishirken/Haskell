@@ -3,6 +3,7 @@ import Chapter12 (notThe, replaceThe)
 import Chapter11.HuttonsRazor (Expr (Lit, Add), eval, printExpr)
 
 import Chapter15Spec
+import Chapter16Spec
 
 main :: IO ()
 main = hspec $ do
@@ -26,3 +27,4 @@ main = hspec $ do
                 replaceThe "the cow loves us" `shouldBe` "a cow loves us"
 
     chapter15spec
+    chapter16spec
