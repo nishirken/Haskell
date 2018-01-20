@@ -12,41 +12,41 @@ functorId' x = (fmap id x) == (id x)
 
 chapter16spec :: SpecWith ()
 chapter16spec =
-    describe "Chapter16 Functor" $ do
+    describe "Chapter16 Functor" $
         context "Functor instances" $ do
-            it "Identity id" $ property $ do
-                functorId' (Identity 2)
+            it "Identity id" $ property $
+                \x -> functorId' (Identity (x :: Int))
 
-            it "Identity compose" $ property $ do
-                functorCompose' (Identity 2) (+3) (*3)
+            it "Identity compose" $ property $
+                \x y -> functorCompose' (Identity (x :: Int)) (+y) (*y)
 
-            it "Pair id" $ property $ do
-                functorId' (Pair 1 3)
+            it "Pair id" $ property $
+                \x y -> functorId' (Pair (x :: Int) (y :: Int))
 
-            it "Pair compose" $ property $ do
+            it "Pair compose" $ property $
                 functorCompose' (Pair 1 3) (+1) (*3)
 
-            it "Two id" $ do
-                fmap id (Two 'a' 1) `shouldBe` id (Two 'a' 1)
+            it "Two id" $
+                fmap id (Two 'a' 1) `shouldBe` id Two 'a' 1
 
-            it "Two compose" $ do
+            it "Two compose" $
                 fmap ((+1) . (*3)) (Two 'a' 1) `shouldBe` (Two 'a' 4)
 
-            it "Three id" $ do
-                fmap id (Three "1" 'a' (3 :: Int)) `shouldBe` id (Three "1" 'a' (3 :: Int))
+            it "Three id" $
+                fmap id (Three "1" 'a' (3 :: Int)) `shouldBe` id Three "1" 'a' (3 :: Int)
 
-            it "Three compose" $ do
+            it "Three compose" $
                 fmap ((+1) . (*3)) (Two 'a' 1) `shouldBe` (Two 'a' 4)
 
-            it "Three' id" $ do
+            it "Three' id" $
                 fmap id (Three' "1" (2 :: Int) (3 :: Int)) `shouldBe` id (Three' "1" (2 :: Int) (3 :: Int))
 
-            it "Three' compose" $ do
+            it "Three' compose" $
                 fmap ((+1) . (*3)) (Three' "1" 2 3) `shouldBe` (Three' "1" 7 10)
 
-            it "Four' id" $ do
+            it "Four' id" $
                 functorId' (Four' 1 3 7 'a')
 
-            it "Four' compose" $ do
+            it "Four' compose" $
                 functorCompose' (Four' 1 3 2 4) (*2) (+3)
 
