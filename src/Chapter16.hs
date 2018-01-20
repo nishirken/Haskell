@@ -35,7 +35,6 @@ data Four' a b = Four' a a a b deriving (Eq, Show)
 instance Functor (Four' a) where
     fmap f (Four' a b c d) = Four' a b c (f d)
 
-
 data Possibly a =
     LolNope
     | Yeppers a
@@ -44,3 +43,12 @@ data Possibly a =
 instance Functor Possibly where
     fmap f (Yeppers x) = Yeppers $ f x
     fmap _ LolNope = LolNope
+
+data OneOrOther a b =
+    One a
+    | Other b
+    deriving (Eq, Show)
+
+instance Functor (OneOrOther a) where
+    fmap f (Other x) = Other (f x)
+    fmap _ (One x) = One x

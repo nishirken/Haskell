@@ -57,4 +57,10 @@ chapter16spec =
             it "Compose works with Just" $ property $
                 \x -> functorCompose' (Yeppers (x :: Int)) (+3) (*3)
 
+        context "OneOrOther - Either" $ do
+            it "Compose works with One" $
+                fmap ((+1) . (*3)) (One 2) `shouldBe` One 2
+
+            it "Compose works with Other" $
+                fmap ((+1) . (*3)) (Other 3 :: OneOrOther Int Int) `shouldBe` Other 10
 
