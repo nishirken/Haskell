@@ -12,7 +12,7 @@ functorId' x = (fmap id x) == (id x)
 
 chapter16spec :: SpecWith ()
 chapter16spec =
-    describe "Chapter16 Functor" $
+    describe "Chapter16 Functor" $ do
         context "Functor instances" $ do
             it "Identity id" $ property $
                 \x -> functorId' (Identity (x :: Int))
@@ -49,4 +49,12 @@ chapter16spec =
 
             it "Four' compose" $
                 functorCompose' (Four' 1 3 2 4) (*2) (+3)
+
+        context "Functor for Possibly - Maybe" $ do
+            it "Id works with Just" $ property $
+                \x -> functorId' (Yeppers (x :: Int))
+
+            it "Compose works with Just" $ property $
+                \x -> functorCompose' (Yeppers (x :: Int)) (+3) (*3)
+
 
