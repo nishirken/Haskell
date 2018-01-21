@@ -52,3 +52,24 @@ data OneOrOther a b =
 instance Functor (OneOrOther a) where
     fmap f (Other x) = Other (f x)
     fmap _ (One x) = One x
+
+data Quant a b =
+    Finance
+    | Desk a
+    | Bloor b
+    deriving (Eq, Show)
+
+instance Functor (Quant a) where
+    fmap _ Finance = Finance
+    fmap f (Desk x) = Desk x
+    fmap f (Bloor x) = Bloor (f x)
+
+data K a b = K a
+
+instance Functor (K a) where
+    fmap f (K x) = K x
+
+newtype T a b = T a
+
+instance Functor (T a) where
+    fmap f (T x) = T x

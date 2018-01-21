@@ -63,4 +63,3 @@ chapter16spec =
 
             it "Compose works with Other" $
                 fmap ((+1) . (*3)) (Other 3 :: OneOrOther Int Int) `shouldBe` Other 10
-
