@@ -4,6 +4,7 @@ import Chapter11.HuttonsRazor (Expr (Lit, Add), eval, printExpr)
 
 import Chapter15Spec
 import Chapter16Spec
+import Chapter17Spec
 
 main :: IO ()
 main = hspec $ do
@@ -28,3 +29,4 @@ main = hspec $ do
 
     chapter15spec
     chapter16spec
+    chapter17spec
