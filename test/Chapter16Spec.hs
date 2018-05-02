@@ -5,7 +5,7 @@ import Test.QuickCheck
 import Chapter16
 
 functorCompose' :: (Eq (f c), Functor f) => f a -> (a -> b) -> (b -> c) -> Bool
-functorCompose' x f g = (fmap (g . f) x) == (fmap g . fmap f $ x)
+functorCompose' x f g = fmap (g . f) x == (fmap g . fmap f $ x)
 
 functorId' :: (Eq (f a), Functor f) => f a -> Bool
 functorId' x = (fmap id x) == (id x)
