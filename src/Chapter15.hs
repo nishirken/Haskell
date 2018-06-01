@@ -24,16 +24,23 @@ instance Monoid a => Monoid (Optional a) where
     mappend Nada x = x
     mappend (Only x) (Only y) = Only $ mappend x y
 
--- Semigroup
 data Trivial = Trivial deriving (Eq, Show)
 
 instance Semigroup Trivial where
 	_ <> _ = Trivial
 
+instance Monoid Trivial where
+	mempty = Trivial
+	mappend _ _ = Trivial
+
 newtype Identity a = Identity a deriving (Eq, Show)
 
 instance Semigroup a => Semigroup (Identity a) where
 	Identity b <> Identity c = Identity (b <> c)
+
+instance Monoid a => Monoid (Identity a) where
+	Identity a `mappend` Identity b = Identity $ a `mappend` b
+	mempty = Identity mempty
 
 data Two a = Two a a deriving (Eq, Show)
 
@@ -55,7 +62,15 @@ newtype BoolConj = BoolConj Bool deriving (Eq, Show)
 instance Semigroup BoolConj where
 	BoolConj a <> BoolConj b = BoolConj (a && b)
 
+instance Monoid BoolConj where
+	BoolConj a `mappend` BoolConj b = BoolConj (a && b)
+	mempty = BoolConj True
+
 newtype BoolDisj = BoolDisj Bool deriving (Eq, Show)
+
+instance Monoid BoolDisj where
+	BoolDisj a `mappend` BoolDisj b = BoolDisj (a || b)
+	mempty = BoolDisj False
 
 instance Semigroup BoolDisj where
 	BoolDisj a <> BoolDisj b = BoolDisj (a || b)

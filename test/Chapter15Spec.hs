@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Chapter15Spec (chapter15spec, semigroupSpec) where
+module Chapter15Spec (chapter15spec, semigroupSpec, monoidIdentitySpec) where
 
 import Data.Semigroup
 import Test.Hspec
@@ -85,12 +85,19 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
 
 type SemigroupAssoc x = x -> x -> x -> Bool
 
+type MonoidIdentity x = x -> Bool
+
 semigroupAssoc :: (Eq m, Semigroup m) => m -> m -> m -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
 
+leftIdentity :: (Eq m, Monoid m) => m -> Bool
+leftIdentity x = mempty `mappend` x == x
+rightIdentity :: (Eq m, Monoid m) => m -> Bool
+rightIdentity x = x `mappend` mempty == x
+
 semigroupSpec :: SpecWith ()
 semigroupSpec =
-	describe "Semigroup" $ do
+	describe "Semigroup assoc" $ do
 		it "Trivial" $ property
 			(semigroupAssoc :: SemigroupAssoc Trivial)
 
@@ -117,3 +124,22 @@ semigroupSpec =
 
 		it "Validation" $ property
 			(semigroupAssoc :: SemigroupAssoc (Validation String String))
+
+monoidIdentitySpec =
+	describe "Monoid identity" $ do
+		context "Trivial" $ do
+			it "Left" $ property $ (leftIdentity :: MonoidIdentity Trivial)
+			it "Right" $ property $ (rightIdentity :: MonoidIdentity Trivial)
+
+		context "Identity" $ do
+			it "Left" $ property $ (leftIdentity :: MonoidIdentity (Identity String))
+			it "Right" $ property $ (rightIdentity :: MonoidIdentity (Identity String))
+
+		context "BoolConj" $ do
+			it "Left" $ property $ (leftIdentity :: MonoidIdentity BoolConj)
+			it "Right" $ property $ (rightIdentity :: MonoidIdentity BoolConj)
+
+		context "BoolDisj" $ do
+			it "Left" $ property $ (leftIdentity :: MonoidIdentity BoolConj)
+			it "Right" $ property $ (rightIdentity :: MonoidIdentity BoolDisj)
+
