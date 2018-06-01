@@ -8,6 +8,7 @@ module Chapter15 (
 	, BoolConj (BoolConj)
 	, BoolDisj (BoolDisj)
 	, Or (Fst, Snd)
+	, Validation (Success, Failure)
 	) where
 
 import Data.Semigroup
@@ -73,4 +74,20 @@ newtype Combine a b =
 	Combine { unCombine :: (a -> b) }
 
 instance (Semigroup a, Semigroup b) => Semigroup (Combine a b) where
-	Combine f <> Combine g = Combine (f <> g)
+	Combine f <> Combine g = Combine $ \x -> f x <> g x
+
+newtype Comp a =
+	Comp { unComp :: (a -> a) }
+
+instance Semigroup (Comp a) where
+	Comp f <> Comp g = Comp $ f . g
+
+data Validation a b =
+	Failure a | Success b
+	deriving (Eq, Show)
+
+instance (Semigroup a, Semigroup b) => Semigroup (Validation a b) where
+	Failure a <> Success _ = Failure a
+	Success _ <> Failure a = Failure a
+	Success a <> Success b = Success (a <> b)
+	Failure a <> Failure b = Failure (a <> b)

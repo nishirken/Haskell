@@ -14,6 +14,7 @@ import Chapter15 (
 	, BoolConj (BoolConj)
 	, BoolDisj (BoolDisj)
 	, Or (Fst, Snd)
+	, Validation (Success, Failure)
 	)
 import Test.QuickCheck
 import Control.Monad
@@ -76,6 +77,12 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
 		y <- arbitrary
 		elements [Fst x, Snd y]
 
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
+	arbitrary = do
+		x <- arbitrary
+		y <- arbitrary
+		elements [Chapter15.Success x, Chapter15.Failure y]
+
 type SemigroupAssoc x = x -> x -> x -> Bool
 
 semigroupAssoc :: (Eq m, Semigroup m) => m -> m -> m -> Bool
@@ -107,3 +114,6 @@ semigroupSpec =
 
 		it "Or" $ property
 			(semigroupAssoc :: SemigroupAssoc (Or String String))
+
+		it "Validation" $ property
+			(semigroupAssoc :: SemigroupAssoc (Validation String String))
