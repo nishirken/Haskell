@@ -4,8 +4,8 @@ import Chapter11.HuttonsRazor (Expr (Lit, Add), eval, printExpr)
 
 import TimeMaskSpec
 import Chapter15Spec
---import Chapter16Spec
---import Chapter17Spec
+import Chapter16Spec
+import Chapter17Spec (chapter17Spec)
 
 main :: IO ()
 main = hspec $ do
@@ -32,5 +32,5 @@ main = hspec $ do
     chapter15spec
     semigroupSpec
     monoidIdentitySpec
---    chapter16spec
---    chapter17spec
+    chapter16Spec
+    chapter17Spec

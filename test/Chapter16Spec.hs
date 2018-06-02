@@ -1,4 +1,4 @@
-module Chapter16Spec where
+module Chapter16Spec (chapter16Spec) where
 
 import Test.Hspec
 import Test.QuickCheck
@@ -10,8 +10,8 @@ functorCompose' x f g = fmap (g . f) x == (fmap g . fmap f $ x)
 functorId' :: (Eq (f a), Functor f) => f a -> Bool
 functorId' x = (fmap id x) == (id x)
 
-chapter16spec :: SpecWith ()
-chapter16spec =
+chapter16Spec :: SpecWith ()
+chapter16Spec =
     describe "Chapter16 Functor" $ do
         context "Functor instances" $ do
             it "Identity id" $ property $
