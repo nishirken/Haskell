@@ -1,6 +1,6 @@
 module Chapter15 (
-	Optional (Nada, Only)
-	, Trivial (Trivial)
+--	Optional (Nada, Only)
+	Trivial (Trivial)
 	, Identity (Identity)
 	, Two (Two)
 	, Three (Three)
@@ -13,16 +13,16 @@ module Chapter15 (
 
 import Data.Semigroup
 
-data Optional a =
-    Nada
-    | Only a
-    deriving (Eq, Show)
-
-instance Monoid a => Monoid (Optional a) where
-    mempty = Nada
-    mappend x Nada = x
-    mappend Nada x = x
-    mappend (Only x) (Only y) = Only $ mappend x y
+--data Optional a =
+--    Nada
+--    | Only a
+--    deriving (Eq, Show)
+--
+--instance Monoid a => Monoid (Optional a) where
+--    mempty = Nada
+--    mappend x Nada = x
+--    mappend Nada x = x
+--    mappend (Only x) (Only y) = Only $ mappend x y
 
 data Trivial = Trivial deriving (Eq, Show)
 

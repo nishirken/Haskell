@@ -1,5 +1,9 @@
 module Chapter16 where
 
+-- Lifting Exercises
+
+a = fmap (+ 1) $ read "[1]" :: [Int]
+
 newtype Identity a = Identity a deriving (Eq, Show)
 
 instance Functor Identity where
