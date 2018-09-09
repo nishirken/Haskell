@@ -8,5 +8,5 @@ services:
       - ./app:/app/app:Z
       - ./test:/app/test:Z
       - ./src:/app/src:Z
-      - ./package.yaml:/app/package.yaml:Z
-      - ./stack.yaml:/app/stack.yaml:Z
+      - ./package.yaml:/app/package.yaml
+      - ./stack.yaml:/app/stack.yaml
