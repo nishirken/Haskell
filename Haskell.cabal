@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 020824d63c03eaaa5e34ddfceffd0de60df39780b4ea402df012c000b1e929a1
+-- hash: 78e656ef7cdb07206fd0e5848b8a0fe39770b3bbf0a9234224e37735af438e03
 
 name:           Haskell
 version:        0.1.0.0
@@ -16,9 +16,6 @@ license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
-extra-source-files:
-    ChangeLog.md
-    README.md
 
 source-repository head
   type: git
@@ -40,7 +37,7 @@ library
       src
   build-depends:
       MissingH
-    , base >=4.7 && <5
+    , base
     , split
   default-language: Haskell2010
 
@@ -54,7 +51,7 @@ executable Haskell-exe
   build-depends:
       Haskell
     , MissingH
-    , base >=4.7 && <5
+    , base
     , split
   default-language: Haskell2010
 
@@ -74,7 +71,7 @@ test-suite Haskell-test
       Haskell
     , MissingH
     , QuickCheck
-    , base >=4.7 && <5
+    , base
     , hspec
     , split
   default-language: Haskell2010
