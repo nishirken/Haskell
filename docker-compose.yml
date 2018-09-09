@@ -1,10 +1,12 @@
-version: '3'
+version: '3.2'
 services:
-  haskell:
+  hs:
     container_name: haskell
-    image: haskell:8.2.1
-    stdin_open: true
+    image: haskell:8.4.3
     tty: true
     volumes:
-      - ./src:/src
-      - ./build:/build
+      - ./app:/app/app:Z
+      - ./test:/app/test:Z
+      - ./src:/app/src:Z
+      - ./package.yaml:/app/package.yaml:Z
+      - ./stack.yaml:/app/stack.yaml:Z
