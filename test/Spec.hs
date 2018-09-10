@@ -29,7 +29,7 @@ main = hspec $ do
                 replaceThe "the cow loves us" `shouldBe` "a cow loves us"
 
 	timeMaskSpec
-    chapter15spec
+--     chapter15spec
     semigroupSpec
     monoidIdentitySpec
     chapter16Spec

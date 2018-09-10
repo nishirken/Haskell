@@ -1,5 +1,5 @@
 module Chapter15 (
---	Optional (Nada, Only)
+-- 	Optional (Nada, Only)
 	Trivial (Trivial)
 	, Identity (Identity)
 	, Two (Two)
@@ -13,12 +13,12 @@ module Chapter15 (
 
 import Data.Semigroup
 
---data Optional a =
+-- data Optional a =
 --    Nada
 --    | Only a
 --    deriving (Eq, Show)
 --
---instance Monoid a => Monoid (Optional a) where
+-- instance Monoid a => Monoid (Optional a) where
 --    mempty = Nada
 --    mappend x Nada = x
 --    mappend Nada x = x

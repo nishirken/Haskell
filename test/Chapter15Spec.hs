@@ -1,12 +1,12 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Chapter15Spec (chapter15spec, semigroupSpec, monoidIdentitySpec) where
+module Chapter15Spec (semigroupSpec, monoidIdentitySpec) where
 
 import Data.Semigroup
 import Test.Hspec
 import Chapter15 (
-	Optional (Only, Nada)
-	, Trivial (Trivial)
+-- 	Optional (Only, Nada)
+	Trivial (Trivial)
 	, Identity (Identity)
 	, Two (Two)
 	, Three (Three)
@@ -19,18 +19,18 @@ import Chapter15 (
 import Test.QuickCheck
 import Control.Monad
 
-chapter15spec :: SpecWith ()
-chapter15spec =
-    describe "Chapter15Spec" $ do
-        context "Maybe instance of Monoid" $ do
-            it "works with two Only" $
-                (Only (Sum 1) `mappend` Only (Sum 1)) `shouldBe` (Only (Sum 2))
-
-            it "works with Only and Nada" $
-                (Only (Sum 1) `mappend` Nada) `shouldBe` (Only $ Sum 1)
-
-            it "works with Only and Nada" $
-                (Nada `mappend` Only (Sum 1)) `shouldBe` (Only $ Sum 1)
+-- chapter15spec :: SpecWith ()
+-- chapter15spec =
+--     describe "Chapter15Spec" $ do
+--         context "Maybe instance of Monoid" $ do
+--             it "works with two Only" $
+--                 (Only (Sum 1) `mappend` Only (Sum 1)) `shouldBe` (Only (Sum 2))
+--
+--             it "works with Only and Nada" $
+--                 (Only (Sum 1) `mappend` Nada) `shouldBe` (Only $ Sum 1)
+--
+--             it "works with Only and Nada" $
+--                 (Nada `mappend` Only (Sum 1)) `shouldBe` (Only $ Sum 1)
 
 instance Arbitrary Trivial where
 	arbitrary = return Trivial

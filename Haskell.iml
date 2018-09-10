@@ -9,8 +9,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea" />
       <excludeFolder url="file://$MODULE_DIR$/.stack-work" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Haskell" jdkType="Haskell SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="split-0.2.3.2" level="project" />
   </component>
 </module>
