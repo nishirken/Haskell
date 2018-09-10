@@ -13,7 +13,7 @@ functorId' x = (fmap id x) == (id x)
 chapter16Spec :: SpecWith ()
 chapter16Spec =
     describe "Chapter16 Functor" $ do
-    	context "Lifting Exercises" $ do
+		context "Lifting Exercises" $ do
     		it "a" $ a `shouldBe` 2
     		it "b" $ b `shouldBe` Just ["Hi,lol","Hellolol"]
     		it "c" $ (c 1) `shouldBe` - 2
@@ -50,11 +50,17 @@ chapter16Spec =
             it "Three' compose" $
                 fmap ((+1) . (*3)) (Three' "1" 2 3) `shouldBe` (Three' "1" 7 10)
 
-            it "Four' id" $
-                functorId' (Four' 1 3 7 'a')
+			it "Four id" $ property $
+				\x -> functorId' (Four 1 3.2 "33" (x :: Char))
 
-            it "Four' compose" $
-                functorCompose' (Four' 1 3 2 4) (*2) (+3)
+-- 			it "Four compose" $ property $
+-- 				\x -> functorCompose' (Four 1 3.2 "33" (x :: Int)) (*2) (+3)
+--
+--             it "Four' id" $ property $
+--                 \x -> functorId' (Four' 1 3 7 (x :: Char))
+--
+--             it "Four' compose" $ property $
+--                 \x -> functorCompose' (Four' 1 3 2 (x :: Int)) (*2) (+3)
 
         context "Functor for Possibly - Maybe" $ do
             it "Id works with Just" $ property $

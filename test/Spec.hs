@@ -10,7 +10,7 @@ import Chapter17Spec (chapter17Spec)
 main :: IO ()
 main = hspec $ do
     describe "HuttonsRazor" $ do
-    	context "eval" $ do
+		context "eval" $ do
             it  "works" $
 	        eval (Add (Lit 1) (Lit 9001)) `shouldBe` 9002
         context "print Expr" $
