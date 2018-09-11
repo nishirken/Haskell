@@ -2,11 +2,11 @@ version: '3.2'
 services:
   hs:
     container_name: haskell
-    image: haskell:8.4.3
+    image: haskell:8.0.2
     tty: true
     volumes:
       - ./app:/app/app:Z
       - ./test:/app/test:Z
       - ./src:/app/src:Z
-      - ./package.yaml:/app/package.yaml
-      - ./stack.yaml:/app/stack.yaml
+      - ./package.yaml:/app/package.yaml:Z
+      - ./stack.yaml:/app/stack.yaml:Z

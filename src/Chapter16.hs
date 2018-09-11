@@ -1,5 +1,20 @@
 module Chapter16 where
 
+-- Lifting Exercises
+
+a = (fmap (+ 1)  $ read "[1]" :: [Int]) !! 0 -- 2
+
+b = (fmap . fmap) (++ "lol") (Just ["Hi,", "Hello"]) -- Just ["Hi,lol","Hellolol"]
+
+c = fmap (* 2) (\x -> x - 2) -- c 1 -> -2
+
+d = fmap ((++) "1" . show) (\x -> [x, 1..3]) -- d 0 -> "1[0,1,2,3]"
+
+e :: IO Integer -- 3693
+e = fmap (* 3) changed where
+    ioi = readIO "1" :: IO Integer
+    changed = fmap (read . ("123" ++) . show) ioi
+
 newtype Identity a = Identity a deriving (Eq, Show)
 
 instance Functor Identity where

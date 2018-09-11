@@ -13,6 +13,12 @@ functorId' x = (fmap id x) == (id x)
 chapter16Spec :: SpecWith ()
 chapter16Spec =
     describe "Chapter16 Functor" $ do
+    	context "Lifting Exercises" $ do
+    		it "a" $ a `shouldBe` 2
+    		it "b" $ b `shouldBe` Just ["Hi,lol","Hellolol"]
+    		it "c" $ (c 1) `shouldBe` - 2
+    		it "d" $ (d 0) `shouldBe` "1[0,1,2,3]"
+
         context "Functor instances" $ do
             it "Identity id" $ property $
                 \x -> functorId' (Identity (x :: Int))
