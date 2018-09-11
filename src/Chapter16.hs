@@ -12,8 +12,8 @@ d = fmap ((++) "1" . show) (\x -> [x, 1..3]) -- d 0 -> "1[0,1,2,3]"
 
 e :: IO Integer -- 3693
 e = fmap (* 3) changed where
-	ioi = readIO "1" :: IO Integer
-	changed = fmap (read . ("123" ++) . show) ioi
+    ioi = readIO "1" :: IO Integer
+    changed = fmap (read . ("123" ++) . show) ioi
 
 newtype Identity a = Identity a deriving (Eq, Show)
 

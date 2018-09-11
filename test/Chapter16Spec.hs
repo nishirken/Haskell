@@ -13,7 +13,7 @@ functorId' x = (fmap id x) == (id x)
 chapter16Spec :: SpecWith ()
 chapter16Spec =
     describe "Chapter16 Functor" $ do
-		context "Lifting Exercises" $ do
+    	context "Lifting Exercises" $ do
     		it "a" $ a `shouldBe` 2
     		it "b" $ b `shouldBe` Just ["Hi,lol","Hellolol"]
     		it "c" $ (c 1) `shouldBe` - 2
