@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8bc35c3fe3628825c8087c7f62ddebf5d56eac67d6abc15618307ab172e5f442
+-- hash: 78e656ef7cdb07206fd0e5848b8a0fe39770b3bbf0a9234224e37735af438e03
 
 name:           Haskell
 version:        0.1.0.0
@@ -16,9 +16,6 @@ license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
-extra-source-files:
-    ChangeLog.md
-    README.md
 
 source-repository head
   type: git

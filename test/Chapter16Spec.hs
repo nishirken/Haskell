@@ -13,65 +13,70 @@ functorId' x = (fmap id x) == (id x)
 chapter16Spec :: SpecWith ()
 chapter16Spec =
     describe "Chapter16 Functor" $ do
-    	context "Lifting Exercises" $ do
-    		it "a" $ a `shouldBe` 2
-    		it "b" $ b `shouldBe` Just ["Hi,lol","Hellolol"]
-    		it "c" $ (c 1) `shouldBe` - 2
-    		it "d" $ (d 0) `shouldBe` "1[0,1,2,3]"
+        context "Lifting Exercises" $ do
+            it "a" $ a `shouldBe` 2
+            it "b" $ b `shouldBe` Just ["Hi,lol","Hellolol"]
+            it "c" $ (c 1) `shouldBe` - 2
+            it "d" $ (d 0) `shouldBe` "1[0,1,2,3]"
 
         context "Functor instances" $ do
             it "Identity id" $ property $
                 \x -> functorId' (Identity (x :: Int))
 
             it "Identity compose" $ property $
-                \x y -> functorCompose' (Identity (x :: Int)) (+y) (*y)
+                \x -> functorCompose' (Identity (x :: Int)) (+ x) (* x)
 
             it "Pair id" $ property $
-                \x y -> functorId' (Pair (x :: Int) (y :: Int))
+                \x -> functorId' (Pair (x :: Int) x)
 
             it "Pair compose" $ property $
-                functorCompose' (Pair 1 3) (+1) (*3)
+                \x -> functorCompose' (Pair (x :: Int) x) (+ x) (* x)
 
-            it "Two id" $
-                fmap id (Two 'a' 1) `shouldBe` id Two 'a' 1
+            it "Two id" $ property $
+                \x y -> functorId' (Two (x :: Char) (y :: Int))
 
-            it "Two compose" $
-                fmap ((+1) . (*3)) (Two 'a' 1) `shouldBe` (Two 'a' 4)
+            it "Two compose" $ property $
+                \x y -> functorCompose' (Two (x :: Char) (y :: Int)) (+ y) (* y)
 
-            it "Three id" $
-                fmap id (Three "1" 'a' (3 :: Int)) `shouldBe` id Three "1" 'a' (3 :: Int)
+            it "Three id" $ property $
+                \x y z -> functorId' (Three (x :: String) (y :: Char) (z :: Int))
 
-            it "Three compose" $
-                fmap ((+1) . (*3)) (Two 'a' 1) `shouldBe` (Two 'a' 4)
+            it "Three compose" $ property $
+                \x y z -> functorCompose' (Three (x :: Char) (y :: Int) (z :: String)) ("22" ++) ('c' :)
 
-            it "Three' id" $
-                fmap id (Three' "1" (2 :: Int) (3 :: Int)) `shouldBe` id (Three' "1" (2 :: Int) (3 :: Int))
+            it "Three' id" $ property $
+                \x y -> functorId' (Three' (x :: String) (y :: Int) y)
 
-            it "Three' compose" $
-                fmap ((+1) . (*3)) (Three' "1" 2 3) `shouldBe` (Three' "1" 7 10)
+            it "Three' compose" $ property $
+                \x y -> functorCompose' (Three (x :: String) (y :: Int) y) (+ y) (* y)
 
-			it "Four id" $ property $
-				\x -> functorId' (Four 1 3.2 "33" (x :: Char))
+            it "Four id" $ property $
+                \x y z x' -> functorId' (Four (x :: Char) (y :: Float) (z :: String) (x' :: Int)) 
 
--- 			it "Four compose" $ property $
--- 				\x -> functorCompose' (Four 1 3.2 "33" (x :: Int)) (*2) (+3)
---
---             it "Four' id" $ property $
---                 \x -> functorId' (Four' 1 3 7 (x :: Char))
---
---             it "Four' compose" $ property $
---                 \x -> functorCompose' (Four' 1 3 2 (x :: Int)) (*2) (+3)
+            it "Four compose" $ property $
+                \x y z x' -> functorCompose' (Four (x :: Char) (y :: Float) (z :: String) (x' :: Int)) (+ x') (* x')
+
+            it "Four' id" $ property $
+                \x y -> functorId' (Four' (x :: String) x x (y :: Char))
+
+            it "Four' compose" $ property $
+                \x y -> functorCompose' (Four' (x :: Char) x x (y :: String)) (y ++) (x :)
 
         context "Functor for Possibly - Maybe" $ do
             it "Id works with Just" $ property $
                 \x -> functorId' (Yeppers (x :: Int))
 
+            it "Id works with Nothing" $ fmap id LolNope `shouldBe` id LolNope
+
             it "Compose works with Just" $ property $
-                \x -> functorCompose' (Yeppers (x :: Int)) (+3) (*3)
+                \x y -> functorCompose' (Yeppers (x :: Int)) (+ (y :: Int)) (* y)
+
+            it "Compose works with Nothing" $
+                functorCompose' LolNope (+ 1) (* 3)
 
         context "OneOrOther - Either" $ do
-            it "Compose works with One" $
-                fmap ((+1) . (*3)) (One 2) `shouldBe` One 2
+            it "Compose works with One" $ property $
+                \x y -> functorId' 
 
             it "Compose works with Other" $
                 fmap ((+1) . (*3)) (Other 3 :: OneOrOther Int Int) `shouldBe` Other 10

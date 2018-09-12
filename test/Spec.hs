@@ -10,9 +10,9 @@ import Chapter17Spec (chapter17Spec)
 main :: IO ()
 main = hspec $ do
     describe "HuttonsRazor" $ do
-		context "eval" $ do
-            it  "works" $
-	        eval (Add (Lit 1) (Lit 9001)) `shouldBe` 9002
+        context "eval" $
+            it "works" $
+                eval (Add (Lit 1) (Lit 9001)) `shouldBe` 9002
         context "print Expr" $
             it "works" $
                 printExpr (Add (Lit 1) (Add (Add (Lit 9001) (Lit 1)) (Lit 20001))) `shouldBe` "1 + 9001 + 1 + 20001"
@@ -28,8 +28,8 @@ main = hspec $ do
             it "replace the with a" $
                 replaceThe "the cow loves us" `shouldBe` "a cow loves us"
 
-	timeMaskSpec
---     chapter15spec
+    timeMaskSpec
+    -- chapter15spec
     semigroupSpec
     monoidIdentitySpec
     chapter16Spec
