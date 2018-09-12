@@ -1,21 +1,21 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Chapter15Spec (semigroupSpec, monoidIdentitySpec) where
+module Chapter15Spec (monoidIdentitySpec) where
 
 import Data.Semigroup
 import Test.Hspec
 import Chapter15 (
 -- 	Optional (Only, Nada)
-	Trivial (Trivial)
-	, Identity (Identity)
-	, Two (Two)
-	, Three (Three)
-	, Four (Four)
-	, BoolConj (BoolConj)
-	, BoolDisj (BoolDisj)
-	, Or (Fst, Snd)
-	, Validation (Success, Failure)
-	)
+    Trivial (Trivial)
+    , Identity (Identity)
+    , Two (Two)
+    , Three (Three)
+    , Four (Four)
+    , BoolConj (BoolConj)
+    , BoolDisj (BoolDisj)
+    , Or (Fst, Snd)
+    , Validation (Success, Failure)
+    )
 import Test.QuickCheck
 import Control.Monad
 
@@ -33,55 +33,55 @@ import Control.Monad
 --                 (Nada `mappend` Only (Sum 1)) `shouldBe` (Only $ Sum 1)
 
 instance Arbitrary Trivial where
-	arbitrary = return Trivial
+    arbitrary = return Trivial
 
 instance Arbitrary a => Arbitrary (Identity a) where
-	arbitrary = do
-		x <- arbitrary
-		return (Identity x)
+    arbitrary = do
+        x <- arbitrary
+        return (Identity x)
 
 instance Arbitrary a => Arbitrary (Two a) where
-	arbitrary = do
-		x <- arbitrary
-		y <- arbitrary
-		return (Two x y)
+    arbitrary = do
+        x <- arbitrary
+        y <- arbitrary
+        return (Two x y)
 
 instance Arbitrary a => Arbitrary (Three a) where
-	arbitrary = do
-		x <- arbitrary
-		y <- arbitrary
-		z <- arbitrary
-		return (Three x y z)
+    arbitrary = do
+        x <- arbitrary
+        y <- arbitrary
+        z <- arbitrary
+        return (Three x y z)
 
 instance Arbitrary a => Arbitrary (Four a) where
-	arbitrary = do
-		x <- arbitrary
-		y <- arbitrary
-		z <- arbitrary
-		z' <- arbitrary
-		return (Four x y z z')
+    arbitrary = do
+        x <- arbitrary
+        y <- arbitrary
+        z <- arbitrary
+        z' <- arbitrary
+        return (Four x y z z')
 
 instance Arbitrary BoolConj where
-	arbitrary = do
-		x <- arbitrary
-		return (BoolConj x)
+    arbitrary = do
+        x <- arbitrary
+        return (BoolConj x)
 
 instance Arbitrary BoolDisj where
-	arbitrary = do
-		x <- arbitrary
-		return (BoolDisj x)
+    arbitrary = do
+        x <- arbitrary
+        return (BoolDisj x)
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
-	arbitrary = do
-		x <- arbitrary
-		y <- arbitrary
-		elements [Fst x, Snd y]
+    arbitrary = do
+        x <- arbitrary
+        y <- arbitrary
+        elements [Fst x, Snd y]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
-	arbitrary = do
-		x <- arbitrary
-		y <- arbitrary
-		elements [Chapter15.Success x, Chapter15.Failure y]
+    arbitrary = do
+        x <- arbitrary
+        y <- arbitrary
+        elements [Chapter15.Success x, Chapter15.Failure y]
 
 type SemigroupAssoc x = x -> x -> x -> Bool
 
@@ -95,35 +95,35 @@ leftIdentity x = mempty `mappend` x == x
 rightIdentity :: (Eq m, Monoid m) => m -> Bool
 rightIdentity x = x `mappend` mempty == x
 
-semigroupSpec :: SpecWith ()
-semigroupSpec =
-	describe "Semigroup assoc" $ do
-		it "Trivial" $ property
-			(semigroupAssoc :: SemigroupAssoc Trivial)
+-- semigroupSpec :: SpecWith ()
+-- semigroupSpec =
+--     describe "Semigroup assoc" $ do
+--         it "Trivial" $ property
+--             (semigroupAssoc :: SemigroupAssoc Trivial)
 
-		it "Identity" $ property
-			(semigroupAssoc :: SemigroupAssoc (Identity String))
+-- 		it "Identity" $ property
+-- 			(semigroupAssoc :: SemigroupAssoc (Identity String))
 
-		it "Two" $ property
-			(semigroupAssoc :: SemigroupAssoc (Two String))
+-- 		it "Two" $ property
+-- 			(semigroupAssoc :: SemigroupAssoc (Two String))
 
-		it "Three" $ property
-			(semigroupAssoc :: SemigroupAssoc (Three String))
+-- 		it "Three" $ property
+-- 			(semigroupAssoc :: SemigroupAssoc (Three String))
 
-		it "Four" $ property
-			(semigroupAssoc :: SemigroupAssoc (Four String))
+-- 		it "Four" $ property
+-- 			(semigroupAssoc :: SemigroupAssoc (Four String))
 
-		it "BoolConj" $ property
-			(semigroupAssoc :: SemigroupAssoc BoolConj)
+-- 		it "BoolConj" $ property
+-- 			(semigroupAssoc :: SemigroupAssoc BoolConj)
 
-		it "BoolDisj" $ property
-			(semigroupAssoc :: SemigroupAssoc BoolDisj)
+-- 		it "BoolDisj" $ property
+-- 			(semigroupAssoc :: SemigroupAssoc BoolDisj)
 
-		it "Or" $ property
-			(semigroupAssoc :: SemigroupAssoc (Or String String))
+-- 		it "Or" $ property
+-- 			(semigroupAssoc :: SemigroupAssoc (Or String String))
 
-		it "Validation" $ property
-			(semigroupAssoc :: SemigroupAssoc (Validation String String))
+-- 		it "Validation" $ property
+-- 			(semigroupAssoc :: SemigroupAssoc (Validation String String))
 
 monoidIdentitySpec =
 	describe "Monoid identity" $ do
@@ -142,4 +142,3 @@ monoidIdentitySpec =
 		context "BoolDisj" $ do
 			it "Left" $ property $ (leftIdentity :: MonoidIdentity BoolConj)
 			it "Right" $ property $ (rightIdentity :: MonoidIdentity BoolDisj)
-

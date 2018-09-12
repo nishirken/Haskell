@@ -30,7 +30,7 @@ main = hspec $ do
 
     timeMaskSpec
     -- chapter15spec
-    semigroupSpec
+    -- semigroupSpec
     monoidIdentitySpec
     chapter16Spec
     chapter17Spec

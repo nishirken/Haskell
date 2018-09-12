@@ -66,17 +66,64 @@ chapter16Spec =
             it "Id works with Just" $ property $
                 \x -> functorId' (Yeppers (x :: Int))
 
-            it "Id works with Nothing" $ fmap id LolNope `shouldBe` id LolNope
+            it "Id works with Nothing" $ property $ functorId' (LolNope :: Possibly Int)
 
             it "Compose works with Just" $ property $
                 \x y -> functorCompose' (Yeppers (x :: Int)) (+ (y :: Int)) (* y)
 
-            it "Compose works with Nothing" $
-                functorCompose' LolNope (+ 1) (* 3)
+            it "Compose works with Nothing" $ property $
+                \x -> functorCompose' (LolNope :: Possibly Int) (+ (x :: Int)) (* x)
 
         context "OneOrOther - Either" $ do
-            it "Compose works with One" $ property $
-                \x y -> functorId' 
+            it "Id works with One" $ property $
+                \x -> functorId' (One x :: OneOrOther Int Int)
 
-            it "Compose works with Other" $
-                fmap ((+1) . (*3)) (Other 3 :: OneOrOther Int Int) `shouldBe` Other 10
+            it "Id works with Other" $ property $
+                \x -> functorId' (Other x :: OneOrOther Int Int)
+
+            it "Compose works with One" $ property $
+                \x y -> functorCompose' (One x :: OneOrOther Int Int) (+ (y :: Int)) (* y)
+
+            it "Compose works with Other" $ property $
+                \x y -> functorCompose' (Other x :: OneOrOther Int Int) (+ (y :: Int)) (* y)
+
+        context "Quant" $ do
+            it "Id works with Finance" $ property $ functorId' (Finance :: Quant Char Int)
+
+            it "Id works with Desk" $ property $ \x -> functorId' (Desk x :: Quant Char Int)
+
+            it "Id works with Bloor" $ property $ \x -> functorId' (Bloor x :: Quant Char Int)
+
+            it "Compose works with Finance" $ property $
+                \x -> functorCompose' (Finance :: Quant Char String) (++ (x :: String)) (++ x)
+
+            it "Compose works with Desk" $ property $
+                \x y -> functorCompose' (Desk x :: Quant Char String) (++ (y :: String)) (++ y)
+
+            it "Compose works with Bloor" $ property $
+                \x -> functorCompose' (Bloor x :: Quant Char String) (++ (x :: String)) (++ x)
+
+        context "K" $ do
+            it "Id works" $ property $ \x -> functorId' (K (x :: Int))
+
+            it "Compose works" $ property $ \x -> functorCompose' (K (x :: Int)) (+ x) (* x)
+
+        context "T" $ do
+            it "Id works" $ property $ \x -> functorId' (T (x :: Int))
+
+            it "Compose works" $ property $ \x -> functorCompose' (T (x :: Int)) (+ x) (* x)
+
+        context "Flip" $ do
+            it "Id works" $ property $ \x -> functorId' (Flip (T (x :: Int)))
+
+            it "Compose works" $ property $ \x -> functorCompose' (Flip (T (x :: Int))) (+ x) (* x)
+
+        context "EvilGoateeConst" $ do
+            it "Id works" $ property $ \x -> functorId' (GoatyConst (x :: Int))
+    
+            it "Compose works" $ property $ \x -> functorCompose' (GoatyConst (x :: Int)) (+ x) (* x)
+
+        -- context "LiftItOut" $ do
+        --     it "Id works" $ property $ \x -> functorId' (LiftItOut (x :: Int))
+
+        --     it "Compose works" $ property $ \x -> functorCompose' (LiftItOut (x :: Int)) (+ x) (* x)

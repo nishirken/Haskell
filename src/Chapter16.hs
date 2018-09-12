@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module Chapter16 where
 
 -- Lifting Exercises
@@ -79,12 +81,27 @@ instance Functor (Quant a) where
     fmap f (Desk x) = Desk x
     fmap f (Bloor x) = Bloor (f x)
 
-data K a b = K a
+data K a b = K a deriving (Eq, Show)
 
 instance Functor (K a) where
     fmap f (K x) = K x
 
-newtype T a b = T a
+newtype T a b = T a deriving (Eq ,Show)
 
 instance Functor (T a) where
     fmap f (T x) = T x
+
+newtype Flip f a b = Flip (f b a) deriving (Eq, Show)
+
+instance Functor (Flip T a) where
+    fmap f (Flip (T a))= Flip (T (f a))
+
+data EvilGoateeConst a b = GoatyConst b deriving (Eq, Show)
+
+instance Functor (EvilGoateeConst a) where
+    fmap f (GoatyConst b) = GoatyConst (f b)
+
+-- data LiftItOut f a = LiftItOut (f a) deriving (Eq, Show)
+
+-- instance Functor (LiftItOut a) where
+--     fmap f (LiftItOut b) = LiftItOut (f b)
