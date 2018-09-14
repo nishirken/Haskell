@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleInstances #-}
+
 module Chapter16 where
 
 -- Lifting Exercises
@@ -79,12 +81,68 @@ instance Functor (Quant a) where
     fmap f (Desk x) = Desk x
     fmap f (Bloor x) = Bloor (f x)
 
-data K a b = K a
+data K a b = K a deriving (Eq, Show)
 
 instance Functor (K a) where
     fmap f (K x) = K x
 
-newtype T a b = T a
+newtype T a b = T a deriving (Eq ,Show)
 
 instance Functor (T a) where
     fmap f (T x) = T x
+
+newtype Flip f a b = Flip (f b a) deriving (Eq, Show)
+
+instance Functor (Flip T a) where
+    fmap f (Flip (T a))= Flip (T (f a))
+
+data EvilGoateeConst a b = GoatyConst b deriving (Eq, Show)
+
+instance Functor (EvilGoateeConst a) where
+    fmap f (GoatyConst b) = GoatyConst (f b)
+
+data LiftItOut f a = LiftItOut (f a) deriving (Eq, Show)
+
+instance Functor f => Functor (LiftItOut f) where
+    fmap f (LiftItOut g) = LiftItOut (fmap f g)
+
+data Parappa f g a = DaWrappa (f a) (g a) deriving (Eq, Show)
+
+instance (Functor f, Functor g) => Functor (Parappa f g) where
+    fmap f (DaWrappa g g') = DaWrappa (fmap f g) (fmap f g')
+
+data IgnoreOne f g a b = IgnoringSomething (f a) (g b) deriving (Eq, Show)
+
+instance (Functor f, Functor g) => Functor (IgnoreOne f g a) where
+    fmap f (IgnoringSomething f' g) = IgnoringSomething f' (fmap f g)
+
+data Notorious g o a t = Notorious (g o) (g a) (g t) deriving (Eq, Show)
+
+instance Functor g => Functor (Notorious g o a) where
+    fmap f (Notorious g g' g'') = Notorious g g' (fmap f g'')
+
+data List a = Nil | Cons a (List a) deriving (Eq, Show)
+
+instance Functor List where
+    fmap f (Cons a b) = Cons (f a) (fmap f b)
+    fmap _ Nil = Nil
+
+data GoatLord a =
+    NoGoat
+    | OneGoat a
+    | MoreGoats (GoatLord a) (GoatLord a) (GoatLord a) deriving (Eq, Show)
+
+instance Functor GoatLord where
+    fmap _ NoGoat = NoGoat
+    fmap f (OneGoat a) = OneGoat (f a)
+    fmap f (MoreGoats a b c) = MoreGoats (fmap f a) (fmap f b) (fmap f c)
+
+data TalkToMe a =
+    Halt
+    | Print String a
+    | Read (String -> a)
+
+instance Functor TalkToMe where
+    fmap _ Halt = Halt
+    fmap f (Print str a) = Print str (f a)
+    fmap f (Read g) = Read $ f . g
