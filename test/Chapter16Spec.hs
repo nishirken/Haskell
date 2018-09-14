@@ -123,7 +123,42 @@ chapter16Spec =
     
             it "Compose works" $ property $ \x -> functorCompose' (GoatyConst (x :: Int)) (+ x) (* x)
 
-        -- context "LiftItOut" $ do
-        --     it "Id works" $ property $ \x -> functorId' (LiftItOut (x :: Int))
+        context "LiftItOut" $ do
+            it "Id works" $ functorId' (LiftItOut (Just 2))
 
-        --     it "Compose works" $ property $ \x -> functorCompose' (LiftItOut (x :: Int)) (+ x) (* x)
+            it "Compose works" $ functorCompose' (LiftItOut (Just 3)) (+ 2) (* 4)
+
+        context "Parappa" $ do
+            it "Id works" $ functorId' (DaWrappa (Just 2) (Just 3))
+
+            it "Compose works" $ functorCompose' (DaWrappa (Just 3) (Just 4)) (+ 2) (* 4)
+
+        context "IgnoreOne" $ do
+            it "Id works" $
+                functorId' (IgnoringSomething (Just 2) (Left "2") :: IgnoreOne Maybe (Either String) Int String)
+
+            it "Compose works" $
+                functorCompose' (IgnoringSomething (Just 3) (Left "2")) (+ 2) (* 4)
+
+        context "Notorious" $ do
+            it "Id works" $ functorId' (Notorious (Just 2) (Just "2") (Just 'a'))
+
+            it "Compose works" $ functorCompose' (Notorious (Just 3) (Just "2") (Just 0.5)) (+ 2) (* 4)
+
+        context "List" $ do
+            it "Id works with Cons" $ functorId' $ Cons 0 $ Cons 1 $ Cons 4 Nil
+            it "Id works with Nil" $ functorId' (Nil :: List Int)
+
+            it "Compose works with Cons" $ functorCompose' (Cons 0 $ Cons 1 $ Cons 4 Nil) (+ 2) (* 4)
+            it "Compose works with Nil" $ functorCompose' Nil (+ 2) (* 4)
+
+        context "GoatLord" $ do
+            it "Id works with NoGoat" $ functorId' (NoGoat :: GoatLord Int)
+            it "Id works with OneGoat" $ functorId' (OneGoat 1)
+            it "Id works MoreGoats"
+                $ functorId' (MoreGoats (MoreGoats (OneGoat 2) NoGoat (OneGoat 2)) (OneGoat 2) NoGoat)
+    
+            it "Compose works with NoGoat" $ functorCompose' NoGoat (+ 2) (* 4)
+            it "Compose works with OneGoat" $ functorCompose' (OneGoat 3) (+ 2) (* 4)
+            it "Compose works with MoreGoats"
+                $ functorCompose' (MoreGoats (MoreGoats (OneGoat 2) NoGoat (OneGoat 2)) (OneGoat 2) NoGoat) (+ 2) (* 4)
