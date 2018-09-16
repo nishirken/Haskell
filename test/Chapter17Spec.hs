@@ -3,9 +3,9 @@ module Chapter17Spec (chapter17Spec) where
 import Test.Hspec
 import Test.QuickCheck
 import Chapter17 (
-	Identity (Identity)
-	, Pair (Pair)
-	)
+    Identity (Identity)
+    , Pair (Pair)
+    )
 
 applicativeIdentity :: (Eq (f a), Applicative f) => f a -> Bool
 applicativeIdentity x = (pure id <*> x) == x
