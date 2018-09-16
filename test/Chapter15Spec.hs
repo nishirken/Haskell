@@ -1,12 +1,13 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Chapter15Spec (monoidIdentitySpec) where
+module Chapter15Spec (chapter15Spec) where
 
 import Data.Semigroup
 import Test.Hspec
 import Chapter15 (
--- 	Optional (Only, Nada)
-    Trivial (Trivial)
+    Optional (Some, None)
+    , First' (First')
+    , Trivial (Trivial)
     , Identity (Identity)
     , Two (Two)
     , Three (Three)
@@ -14,23 +15,22 @@ import Chapter15 (
     , BoolConj (BoolConj)
     , BoolDisj (BoolDisj)
     , Or (Fst, Snd)
+    , Combine (Combine)
+    , Comp (Comp)
     , Validation (Success, Failure)
     )
-import Test.QuickCheck
+import Test.QuickCheck (Arbitrary, arbitrary, elements, property)
 import Control.Monad
 
--- chapter15spec :: SpecWith ()
--- chapter15spec =
---     describe "Chapter15Spec" $ do
---         context "Maybe instance of Monoid" $ do
---             it "works with two Only" $
---                 (Only (Sum 1) `mappend` Only (Sum 1)) `shouldBe` (Only (Sum 2))
---
---             it "works with Only and Nada" $
---                 (Only (Sum 1) `mappend` Nada) `shouldBe` (Only $ Sum 1)
---
---             it "works with Only and Nada" $
---                 (Nada `mappend` Only (Sum 1)) `shouldBe` (Only $ Sum 1)
+instance Arbitrary a => Arbitrary (Optional a) where
+    arbitrary = do
+        x <- arbitrary
+        elements [Some x, None]
+
+instance Arbitrary a => Arbitrary (First' a) where
+    arbitrary = do
+        x <- arbitrary
+        return (First' x)
 
 instance Arbitrary Trivial where
     arbitrary = return Trivial
@@ -81,64 +81,72 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
     arbitrary = do
         x <- arbitrary
         y <- arbitrary
-        elements [Chapter15.Success x, Chapter15.Failure y]
-
-type SemigroupAssoc x = x -> x -> x -> Bool
+        elements [Failure x, Success y]
 
 type MonoidIdentity x = x -> Bool
 
-semigroupAssoc :: (Eq m, Semigroup m) => m -> m -> m -> Bool
-semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
-
 leftIdentity :: (Eq m, Monoid m) => m -> Bool
 leftIdentity x = mempty `mappend` x == x
+
 rightIdentity :: (Eq m, Monoid m) => m -> Bool
 rightIdentity x = x `mappend` mempty == x
 
--- semigroupSpec :: SpecWith ()
--- semigroupSpec =
---     describe "Semigroup assoc" $ do
---         it "Trivial" $ property
---             (semigroupAssoc :: SemigroupAssoc Trivial)
+testLeftIdentity f = it "Left identity" $ property f
+testRightIdentity f = it "Right identity" $ property f
 
--- 		it "Identity" $ property
--- 			(semigroupAssoc :: SemigroupAssoc (Identity String))
+type Assoc x = x -> x -> x -> Bool
 
--- 		it "Two" $ property
--- 			(semigroupAssoc :: SemigroupAssoc (Two String))
+assoc :: (Eq m, Semigroup m) => m -> m -> m -> Bool
+assoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
 
--- 		it "Three" $ property
--- 			(semigroupAssoc :: SemigroupAssoc (Three String))
+testAssoc f = it "Assoc" $ property f
 
--- 		it "Four" $ property
--- 			(semigroupAssoc :: SemigroupAssoc (Four String))
+chapter15Spec =
+    describe "Chapter15 Monoid and Semigroups" $ do
+        context "Optional" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity (Optional String))
+            testRightIdentity (rightIdentity :: MonoidIdentity (Optional String))
+            testAssoc (assoc :: Assoc (Optional String))
 
--- 		it "BoolConj" $ property
--- 			(semigroupAssoc :: SemigroupAssoc BoolConj)
+        context "First'" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity (First' String))
+            testRightIdentity (rightIdentity :: MonoidIdentity (First' String))
+            testAssoc (assoc :: Assoc (First' String))
 
--- 		it "BoolDisj" $ property
--- 			(semigroupAssoc :: SemigroupAssoc BoolDisj)
+        context "Trivial" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity Trivial)
+            testRightIdentity (rightIdentity :: MonoidIdentity Trivial)
+            testAssoc (assoc :: Assoc Trivial)
 
--- 		it "Or" $ property
--- 			(semigroupAssoc :: SemigroupAssoc (Or String String))
+        context "Identity" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity (Identity String))
+            testRightIdentity (rightIdentity :: MonoidIdentity (Identity String))
+            testAssoc (assoc :: Assoc (Identity String))
 
--- 		it "Validation" $ property
--- 			(semigroupAssoc :: SemigroupAssoc (Validation String String))
+        context "Two" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity (Two (Sum Int)))
+            testRightIdentity (rightIdentity :: MonoidIdentity (Two (Sum Int)))
+            testAssoc (assoc :: Assoc (Two (Sum Int)))
+    
+        context "Three" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity (Three String))
+            testRightIdentity (rightIdentity :: MonoidIdentity (Three String))
+            testAssoc (assoc :: Assoc (Three String))
 
-monoidIdentitySpec =
-	describe "Monoid identity" $ do
-		context "Trivial" $ do
-			it "Left" $ property $ (leftIdentity :: MonoidIdentity Trivial)
-			it "Right" $ property $ (rightIdentity :: MonoidIdentity Trivial)
+        context "Four" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity (Four String))
+            testRightIdentity (rightIdentity :: MonoidIdentity (Four String))
+            testAssoc (assoc :: Assoc (Four String))
 
-		context "Identity" $ do
-			it "Left" $ property $ (leftIdentity :: MonoidIdentity (Identity String))
-			it "Right" $ property $ (rightIdentity :: MonoidIdentity (Identity String))
+        context "BoolConj" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity BoolConj)
+            testRightIdentity (rightIdentity :: MonoidIdentity BoolConj)
+            testAssoc (assoc :: Assoc BoolConj)
 
-		context "BoolConj" $ do
-			it "Left" $ property $ (leftIdentity :: MonoidIdentity BoolConj)
-			it "Right" $ property $ (rightIdentity :: MonoidIdentity BoolConj)
+        context "BoolDisj" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity BoolDisj)
+            testRightIdentity (rightIdentity :: MonoidIdentity BoolDisj)
+            testAssoc (assoc :: Assoc BoolDisj)
 
-		context "BoolDisj" $ do
-			it "Left" $ property $ (leftIdentity :: MonoidIdentity BoolConj)
-			it "Right" $ property $ (rightIdentity :: MonoidIdentity BoolDisj)
+        context "Validation" $ do
+            testAssoc (assoc :: Assoc (Validation (Sum Int) String))
