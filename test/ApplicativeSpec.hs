@@ -1,89 +1,43 @@
-module Chapter17Spec (chapter17Spec) where
+module ApplicativeSpec (applicativeSpec) where
 
 import Data.Monoid (Sum, Product)
-import Test.Hspec
-import Test.QuickCheck
-import Control.Monad (replicateM)
-import Chapter17 (
-    Identity (Identity)
-    , Pair (Pair)
-    , Two (Two)
-    , Three (Three)
-    , Three' (Three')
-    , Four (Four)
-    , Four' (Four')
-    , List (Cons, Nil)
-    )
+import Test.Hspec (context, describe, it, SpecWith)
+import Test.QuickCheck (property)
+import CommonArbitrary
+
+import MyData.Identity
+import MyData.Pair
+import MyData.Two
+import MyData.Three
+import MyData.Three'
+import MyData.Four
+import MyData.Four'
+import MyData.List
 
 type Id functor = functor -> Bool
+
 identity :: (Eq (f a), Applicative f) => f a -> Bool
 identity functor = (pure id <*> functor) == functor
+
 testIdentity identityFn = it "Id" $ property identityFn
 
 composition :: (Eq (f a), Applicative f) => f (a -> a) -> f (a -> a) -> f a -> Bool
 composition functor1 functor2 functor3 =
     (pure (.) <*> functor1 <*> functor2 <*> functor3) == (functor1 <*> (functor2 <*> functor3))
+
 testComposition compositionFn = it "Composition" $ property compositionFn
 
 testHomomorphism homomorphismFn = it "Homomorphism" $ property homomorphismFn
 
 type Interchange functor = Id functor
+
 interchange :: (Eq (f a), Applicative f) => f (a -> a) -> a -> Bool
 interchange functor value = (functor <*> pure value) == (pure ($ value) <*> functor)
+
 testInterchange interchangeFn = it "Interchange" $ property interchangeFn
 
-instance Arbitrary a => Arbitrary (Identity a) where
-    arbitrary = arbitrary >>= \x -> return $ Identity x
-
-instance Arbitrary a => Arbitrary (Pair a)  where
-    arbitrary =
-        arbitrary >>= \x ->
-            arbitrary >>= \y -> return $ Pair x y
-
-instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
-    arbitrary =
-        arbitrary >>= \x ->
-            arbitrary >>= \y -> return $ Two x y
-
-instance (Arbitrary a, Arbitrary b, Arbitrary c) => Arbitrary (Three a b c) where
-    arbitrary =
-        arbitrary >>= \x ->
-            arbitrary >>= \y ->
-                arbitrary >>= \z -> return $ Three x y z
-
-instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
-    arbitrary =
-        arbitrary >>= \x ->
-            arbitrary >>= \y -> return $ Three' x y y
-
-instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) => Arbitrary (Four a b c d) where
-    arbitrary =
-        arbitrary >>= \x ->
-            arbitrary >>= \y ->
-                arbitrary >>= \z ->
-                    arbitrary >>= \z' -> return $ Four x y z z'
-
-instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
-    arbitrary =
-        arbitrary >>= \x ->
-            arbitrary >>= \y -> return $ Four' x y y y
-
-instance CoArbitrary a => CoArbitrary (List a) where
-    coarbitrary Nil = variant 0
-    coarbitrary (Cons a b) = variant 1 . coarbitrary b
-  
-instance Arbitrary a => Arbitrary (List a) where
-    arbitrary = sized arbList
-        where
-            arbList :: Arbitrary a => Int -> Gen (List a)
-            arbList 0 = arbitrary >>= \x -> return $ Cons x Nil
-            arbList n = do
-                x <- arbitrary
-                rest <- arbList $ n - 1
-                return $ Cons x rest
-
-chapter17Spec :: SpecWith ()
-chapter17Spec =
+applicativeSpec :: SpecWith ()
+applicativeSpec =
     describe "Chapter17 Applicative" $ do
         context "Identity" $ do
             testIdentity (identity :: Id (Identity Int))
