@@ -8,3 +8,16 @@ data OneOrOther a b =
 instance Functor (OneOrOther a) where
     fmap f (Other x) = Other (f x)
     fmap _ (One x) = One x
+
+instance Applicative (OneOrOther a) where
+    pure x = Other x
+    _ <*> (One x) = One x
+    (One f) <*> _ = One f
+    (Other f) <*> (Other x) = Other (f x)
+
+
+instance Monad (OneOrOther a) where
+    return = pure
+    (One x) >>= _ = One x
+    (Other x) >>= f = f x
+    

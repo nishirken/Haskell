@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e37a064c5a730c862a73df87c139469b6d4955fce3df3d2299154c6714d86eb1
+-- hash: c9187c9843edf56e937eff71ff3fd2a961e9b8aad64bea5457873a8c63f8fae8
 
 name:           Haskell
 version:        0.1.0.0
@@ -26,6 +26,7 @@ library
       Chapter11.HuttonsRazor
       Chapter12
       Lib
+      MonadUtils
       MyData.BoolConj
       MyData.BoolDisj
       MyData.Combine
@@ -40,6 +41,7 @@ library
       MyData.K
       MyData.LiftItOut
       MyData.List
+      MyData.Nope
       MyData.Notorious
       MyData.OneOrOther
       MyData.Optional
@@ -87,6 +89,7 @@ test-suite Haskell-test
       ApplicativeSpec
       CommonArbitrary
       FunctorSpec
+      MonadSpec
       MonoidSpec
       TimeMaskSpec
       Paths_Haskell
