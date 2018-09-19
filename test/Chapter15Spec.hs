@@ -19,6 +19,8 @@ import Chapter15 (
     , Comp (Comp)
     , Validation (Success, Failure)
     )
+import Chapter17 (List (Cons, Nil))
+import Chapter17Spec
 import Test.QuickCheck (Arbitrary, arbitrary, elements, property)
 import Control.Monad
 
@@ -150,3 +152,8 @@ chapter15Spec =
 
         context "Validation" $ do
             testAssoc (assoc :: Assoc (Validation (Sum Int) String))
+
+        context "List" $ do
+            testLeftIdentity (leftIdentity :: MonoidIdentity (List Int))
+            testRightIdentity (rightIdentity :: MonoidIdentity (List Int))
+            testAssoc (assoc :: Assoc (List Int))
