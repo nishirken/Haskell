@@ -1,28 +1,21 @@
-{-# LANGUAGE FlexibleContexts #-}
+module MonoidSpec (monoidSpec) where
 
-module Chapter15Spec (chapter15Spec) where
-
-import Data.Semigroup
-import Test.Hspec
-import Chapter15 (
-    Optional (Some, None)
-    , First' (First')
-    , Trivial (Trivial)
-    , Identity (Identity)
-    , Two (Two)
-    , Three (Three)
-    , Four (Four)
-    , BoolConj (BoolConj)
-    , BoolDisj (BoolDisj)
-    , Or (Fst, Snd)
-    , Combine (Combine)
-    , Comp (Comp)
-    , Validation (Success, Failure)
-    )
-import Chapter17 (List (Cons, Nil))
-import Chapter17Spec
+import Data.Monoid (Sum)
+import Test.Hspec (context, describe, it, SpecWith)
 import Test.QuickCheck (Arbitrary, arbitrary, elements, property)
-import Control.Monad
+import CommonArbitrary
+
+import MyData.Optional
+import MyData.First'
+import MyData.Trivial
+import MyData.Identity
+import MyData.Two
+import MyData.Three
+import MyData.Four
+import MyData.BoolConj
+import MyData.BoolDisj
+import MyData.Validation
+import MyData.List
 
 instance Arbitrary a => Arbitrary (Optional a) where
     arbitrary = do
@@ -37,32 +30,6 @@ instance Arbitrary a => Arbitrary (First' a) where
 instance Arbitrary Trivial where
     arbitrary = return Trivial
 
-instance Arbitrary a => Arbitrary (Identity a) where
-    arbitrary = do
-        x <- arbitrary
-        return (Identity x)
-
-instance Arbitrary a => Arbitrary (Two a) where
-    arbitrary = do
-        x <- arbitrary
-        y <- arbitrary
-        return (Two x y)
-
-instance Arbitrary a => Arbitrary (Three a) where
-    arbitrary = do
-        x <- arbitrary
-        y <- arbitrary
-        z <- arbitrary
-        return (Three x y z)
-
-instance Arbitrary a => Arbitrary (Four a) where
-    arbitrary = do
-        x <- arbitrary
-        y <- arbitrary
-        z <- arbitrary
-        z' <- arbitrary
-        return (Four x y z z')
-
 instance Arbitrary BoolConj where
     arbitrary = do
         x <- arbitrary
@@ -72,12 +39,6 @@ instance Arbitrary BoolDisj where
     arbitrary = do
         x <- arbitrary
         return (BoolDisj x)
-
-instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
-    arbitrary = do
-        x <- arbitrary
-        y <- arbitrary
-        elements [Fst x, Snd y]
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
     arbitrary = do
@@ -103,7 +64,8 @@ assoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
 
 testAssoc f = it "Assoc" $ property f
 
-chapter15Spec =
+monoidSpec :: SpecWith ()
+monoidSpec =
     describe "Chapter15 Monoid and Semigroups" $ do
         context "Optional" $ do
             testLeftIdentity (leftIdentity :: MonoidIdentity (Optional String))
@@ -126,19 +88,19 @@ chapter15Spec =
             testAssoc (assoc :: Assoc (Identity String))
 
         context "Two" $ do
-            testLeftIdentity (leftIdentity :: MonoidIdentity (Two (Sum Int)))
-            testRightIdentity (rightIdentity :: MonoidIdentity (Two (Sum Int)))
-            testAssoc (assoc :: Assoc (Two (Sum Int)))
+            testLeftIdentity (leftIdentity :: MonoidIdentity (Two (Sum Int) String))
+            testRightIdentity (rightIdentity :: MonoidIdentity (Two (Sum Int) String))
+            testAssoc (assoc :: Assoc (Two (Sum Int) String))
     
         context "Three" $ do
-            testLeftIdentity (leftIdentity :: MonoidIdentity (Three String))
-            testRightIdentity (rightIdentity :: MonoidIdentity (Three String))
-            testAssoc (assoc :: Assoc (Three String))
+            testLeftIdentity (leftIdentity :: MonoidIdentity (Three String (Sum Int) String))
+            testRightIdentity (rightIdentity :: MonoidIdentity (Three String (Sum Int) String))
+            testAssoc (assoc :: Assoc (Three String (Sum Int) String))
 
         context "Four" $ do
-            testLeftIdentity (leftIdentity :: MonoidIdentity (Four String))
-            testRightIdentity (rightIdentity :: MonoidIdentity (Four String))
-            testAssoc (assoc :: Assoc (Four String))
+            testLeftIdentity (leftIdentity :: MonoidIdentity (Four String (Sum Int) String (Sum Int)))
+            testRightIdentity (rightIdentity :: MonoidIdentity (Four String (Sum Int) String (Sum Int)))
+            testAssoc (assoc :: Assoc (Four String (Sum Int) String (Sum Int)))
 
         context "BoolConj" $ do
             testLeftIdentity (leftIdentity :: MonoidIdentity BoolConj)

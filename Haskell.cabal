@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 78e656ef7cdb07206fd0e5848b8a0fe39770b3bbf0a9234224e37735af438e03
+-- hash: e37a064c5a730c862a73df87c139469b6d4955fce3df3d2299154c6714d86eb1
 
 name:           Haskell
 version:        0.1.0.0
@@ -25,11 +25,36 @@ library
   exposed-modules:
       Chapter11.HuttonsRazor
       Chapter12
-      Chapter15
-      Chapter16
-      Chapter17
-      Chapter18
       Lib
+      MyData.BoolConj
+      MyData.BoolDisj
+      MyData.Combine
+      MyData.Comp
+      MyData.EvilGoateeConst
+      MyData.First'
+      MyData.Four
+      MyData.Four'
+      MyData.GoatLord
+      MyData.Identity
+      MyData.IgnoreOne
+      MyData.K
+      MyData.LiftItOut
+      MyData.List
+      MyData.Notorious
+      MyData.OneOrOther
+      MyData.Optional
+      MyData.Or
+      MyData.Pair
+      MyData.Parappa
+      MyData.Possibly
+      MyData.Quant
+      MyData.T
+      MyData.TalkToMe
+      MyData.Three
+      MyData.Three'
+      MyData.Trivial
+      MyData.Two
+      MyData.Validation
       TimeMask
   other-modules:
       Paths_Haskell
@@ -59,9 +84,10 @@ test-suite Haskell-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Chapter15Spec
-      Chapter16Spec
-      Chapter17Spec
+      ApplicativeSpec
+      CommonArbitrary
+      FunctorSpec
+      MonoidSpec
       TimeMaskSpec
       Paths_Haskell
   hs-source-dirs:

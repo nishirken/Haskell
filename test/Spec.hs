@@ -3,9 +3,9 @@ import Chapter12 (notThe, replaceThe)
 import Chapter11.HuttonsRazor (Expr (Lit, Add), eval, printExpr)
 
 import TimeMaskSpec
-import Chapter15Spec (chapter15Spec)
-import Chapter16Spec (chapter16Spec)
-import Chapter17Spec (chapter17Spec)
+import MonoidSpec (monoidSpec)
+import FunctorSpec (functorSpec)
+import ApplicativeSpec (applicativeSpec)
 
 main :: IO ()
 main = hspec $ do
@@ -29,6 +29,6 @@ main = hspec $ do
                 replaceThe "the cow loves us" `shouldBe` "a cow loves us"
 
     timeMaskSpec
-    chapter15Spec
-    chapter16Spec
-    chapter17Spec
+    monoidSpec
+    functorSpec
+    applicativeSpec
