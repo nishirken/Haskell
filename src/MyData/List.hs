@@ -19,3 +19,8 @@ instance Applicative List where
     x <*> Nil = Nil
     Nil <*> x = Nil
     Cons f fs <*> Cons x xs = Cons (f x) ((fs <*> Cons x xs) <> (Cons f fs <*> xs))
+
+instance Monad List where
+    return = pure
+    Nil >>= _ = Nil
+    Cons x xs >>= f = f x <> (xs >>= f)

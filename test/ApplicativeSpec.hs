@@ -13,6 +13,7 @@ import MyData.Three'
 import MyData.Four
 import MyData.Four'
 import MyData.List
+import MyData.OneOrOther
 
 type Id functor = functor -> Bool
 
@@ -108,3 +109,10 @@ applicativeSpec =
                 \x y z -> composition (Cons (+ (x :: Int)) (Cons (* x) Nil)) (Cons (* (y :: Int)) Nil) (z :: List Int)
             testHomomorphism $ \x y -> (pure (* x) <*> pure y) == (pure (x * y) :: List Int)
             testInterchange $ \x y -> interchange (Cons (+ (x :: Int)) Nil) (y :: Int)
+
+        context "OneOrOther" $ do
+            testIdentity (identity :: Id(OneOrOther Int String))
+            testComposition $
+                \x y z -> composition (One (x :: Int)) (Other (++ (y :: String))) (z :: OneOrOther Int String)
+            testHomomorphism $ \x y -> (pure (* x) <*> pure y) == (pure (x * y) :: OneOrOther String Int)
+            testInterchange $ \x y -> interchange (One (x :: Int)) (y :: Int)

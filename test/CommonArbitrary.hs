@@ -1,7 +1,7 @@
 module CommonArbitrary where
 
 import Control.Monad (replicateM)
-import Test.QuickCheck (Arbitrary, CoArbitrary, arbitrary, coarbitrary, Gen, sized, variant)
+import Test.QuickCheck (Arbitrary, CoArbitrary, arbitrary, coarbitrary, Gen, elements, sized, variant)
 
 import MyData.Identity
 import MyData.Pair
@@ -11,6 +11,7 @@ import MyData.Three'
 import MyData.Four
 import MyData.Four'
 import MyData.List
+import MyData.OneOrOther
 
 instance Arbitrary a => Arbitrary (Identity a) where
     arbitrary = do
@@ -66,3 +67,9 @@ instance Arbitrary a => Arbitrary (List a) where
                 x <- arbitrary
                 rest <- arbList $ n - 1
                 return $ Cons x rest
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (OneOrOther a b) where
+    arbitrary = do
+        x <- arbitrary
+        y <- arbitrary
+        elements [One x, Other y]

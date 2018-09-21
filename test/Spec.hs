@@ -6,6 +6,7 @@ import TimeMaskSpec
 import MonoidSpec (monoidSpec)
 import FunctorSpec (functorSpec)
 import ApplicativeSpec (applicativeSpec)
+import MonadSpec (monadSpec)
 
 main :: IO ()
 main = hspec $ do
@@ -32,3 +33,4 @@ main = hspec $ do
     monoidSpec
     functorSpec
     applicativeSpec
+    monadSpec
