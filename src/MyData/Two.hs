@@ -14,3 +14,7 @@ instance Functor (Two a) where
 instance Monoid a => Applicative (Two a) where
     pure x = Two mempty x
     (Two x g) <*> (Two a b) = Two (x <> a) (g b)
+
+instance Foldable (Two a) where
+    foldr f initial (Two a b) = f b initial
+    foldl f initial (Two a b) = f initial b
