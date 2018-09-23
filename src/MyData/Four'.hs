@@ -8,3 +8,7 @@ instance Functor (Four' a) where
 instance Monoid a => Applicative (Four' a) where
     pure x = Four' mempty x x x
     (Four' x f g g') <*> (Four' a b c d) = Four' (x <> a) (f b) (g c) (g' d)
+
+instance Foldable (Four' a) where
+    foldr f initial (Four' x y z z') = f y $ f z $ f z' initial
+    foldl f initial (Four' x y z z') = f (f (f initial y) z) z'

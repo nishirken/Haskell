@@ -7,6 +7,7 @@ import MonoidSpec (monoidSpec)
 import FunctorSpec (functorSpec)
 import ApplicativeSpec (applicativeSpec)
 import MonadSpec (monadSpec)
+import FoldableSpec (foldableSpec)
 
 main :: IO ()
 main = hspec $ do
@@ -34,3 +35,4 @@ main = hspec $ do
     functorSpec
     applicativeSpec
     monadSpec
+    foldableSpec

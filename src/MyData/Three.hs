@@ -14,3 +14,7 @@ instance Functor (Three a b) where
 instance (Monoid a, Monoid b) => Applicative (Three a b) where
     pure x = Three mempty mempty x
     (Three x y f) <*> (Three a b c) = Three (x <> a) (y <> b) (f c)
+
+instance Foldable (Three a b) where
+    foldr f initial (Three a b c) = f c initial
+    foldl f initial (Three a b c) = f initial c
