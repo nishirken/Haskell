@@ -12,9 +12,12 @@ instance Functor (Three a b) where
     fmap f (Three x y z) = Three x y (f z)
 
 instance (Monoid a, Monoid b) => Applicative (Three a b) where
-    pure x = Three mempty mempty x
+    pure = Three mempty mempty
     (Three x y f) <*> (Three a b c) = Three (x <> a) (y <> b) (f c)
 
 instance Foldable (Three a b) where
     foldr f initial (Three a b c) = f c initial
     foldl f initial (Three a b c) = f initial c
+
+instance Traversable (Three a b) where
+    traverse f (Three x y z) = Three x y <$> f z

@@ -19,3 +19,9 @@ instance Monad Identity where
     return = pure
     (Identity x) >>= f = f x
     x >> y = y
+
+instance Foldable Identity where
+    foldr f initial (Identity x) = f x initial
+
+instance Traversable Identity where
+    traverse f (Identity x) = Identity <$> f x

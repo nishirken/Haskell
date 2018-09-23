@@ -2,12 +2,12 @@ import Test.Hspec
 import Chapter12 (notThe, replaceThe)
 import Chapter11.HuttonsRazor (Expr (Lit, Add), eval, printExpr)
 
-import TimeMaskSpec
 import MonoidSpec (monoidSpec)
 import FunctorSpec (functorSpec)
 import ApplicativeSpec (applicativeSpec)
 import MonadSpec (monadSpec)
 import FoldableSpec (foldableSpec)
+import TraversableSpec (traversableSpec)
 
 main :: IO ()
 main = hspec $ do
@@ -30,9 +30,9 @@ main = hspec $ do
             it "replace the with a" $
                 replaceThe "the cow loves us" `shouldBe` "a cow loves us"
 
-    timeMaskSpec
     monoidSpec
     functorSpec
     applicativeSpec
     monadSpec
     foldableSpec
+    traversableSpec

@@ -12,3 +12,6 @@ instance Monoid a => Applicative (Three' a) where
 instance Foldable (Three' a) where
     foldr f initial (Three' x y z) = f y (f z initial)
     foldl f initial (Three' x y z) = f (f initial y) z
+
+instance Traversable (Three' a) where
+    traverse f (Three' x y z) = Three' x <$> f y <*> f z

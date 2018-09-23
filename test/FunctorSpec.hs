@@ -23,6 +23,8 @@ import MyData.IgnoreOne
 import MyData.Notorious
 import MyData.List
 import MyData.GoatLord
+import MyData.S
+import MyData.Tree
 
 type Id x = x -> Bool
 
@@ -162,3 +164,11 @@ functorSpec =
             it "Compose works with OneGoat" $ composition (OneGoat 3) (+ 2) (* 4)
             it "Compose works with MoreGoats"
                 $ composition (MoreGoats (MoreGoats (OneGoat 2) NoGoat (OneGoat 2)) (OneGoat 2) NoGoat) (+ 2) (* 4)
+
+        context "S" $ do
+            testIdentity $ (\x -> identity (x :: S Maybe Int))
+            testComposition $ \x y -> composition (S (Just x) (x :: Int)) (+ (y :: Int)) (* y)
+
+        context "Tree" $ do
+            testIdentity $ (\x -> identity (x :: Tree Int))
+            testComposition $ \x y -> composition (x :: Tree Int) (+ (y :: Int)) (* y)
