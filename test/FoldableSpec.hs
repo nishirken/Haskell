@@ -1,17 +1,30 @@
 module FoldableSpec (foldableSpec) where
 
 import Test.Hspec (context, describe, it, SpecWith, shouldBe)
-import Test.QuickCheck (property)
+import Test.QuickCheck (Arbitrary, Gen, arbitrary, property, NonEmptyList (..))
 import Data.Foldable (toList)
 import Data.Monoid (Product (..), Sum (..))
 
 import CommonArbitrary
-import FoldableUtils (mySum, myProduct, myElem, myNull, myLength, myToList, myFold, myFoldMap, filterF)
+import FoldableUtils (
+    mySum
+    , myProduct
+    , myElem
+    , myNull
+    , myLength
+    , myToList
+    , myFold
+    , myFoldMap
+    , filterF
+    , myMinimum
+    , myMaximum
+    )
 import MyData.Constant
 import MyData.Two
 import MyData.Three
 import MyData.Three'
 import MyData.Four'
+import qualified Data.List.NonEmpty as ListNonEmpty
 
 foldableSpec :: SpecWith ()
 foldableSpec = do
@@ -19,13 +32,13 @@ foldableSpec = do
         it "sum" $ property $ \x -> mySum (x :: [Int]) == sum x
         it "product" $ property $ \x -> myProduct (x :: [Int]) == product x
         it "elem" $ property $ \x xs -> myElem (x :: Int) (xs :: [Int]) == elem x xs
-        -- it "minimum" $ property $ \xs -> myMimimum  (xs :: [Int]) == minimum xs
-        -- it "maximum" $ property $ \xs -> myMaximum  (xs :: [Int]) == maximum xs
-        it "null" $ property $ \xs -> myNull  (xs :: [Int]) == null xs
-        it "length" $ property $ \xs -> myLength  (xs :: [Int]) == length xs
+        it "minimum" $ myMinimum ([1, 3, 4, 5] :: [Int]) == minimum [1, 3, 4, 5]
+        it "maximum" $ myMaximum ([1, 3, 4, 5] :: [Int]) == maximum [1, 3, 4, 5]
+        it "null" $ property $ \xs -> myNull (xs :: [Int]) == null xs
+        it "length" $ property $ \xs -> myLength (xs :: [Int]) == length xs
 
         context "myToList" $ do
-            it "with List" $ property $ \xs -> myToList  (xs :: [Int]) == toList xs
+            it "with List" $ property $ \xs -> myToList (xs :: [Int]) == toList xs
             it "with Maybe" $ property $ \xs -> myToList (xs :: (Maybe Int)) == toList xs
 
         context "foldMap" $ do

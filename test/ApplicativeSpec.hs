@@ -2,7 +2,7 @@ module ApplicativeSpec (applicativeSpec) where
 
 import Data.Monoid (Sum, Product)
 import Test.Hspec (context, describe, it, SpecWith)
-import Test.QuickCheck (property)
+import Test.QuickCheck (property, mapSize)
 import CommonArbitrary
 
 import MyData.Identity
@@ -14,6 +14,8 @@ import MyData.Four
 import MyData.Four'
 import MyData.List
 import MyData.OneOrOther
+import MyData.S
+import MyData.Tree
 
 type Id functor = functor -> Bool
 
@@ -116,3 +118,9 @@ applicativeSpec =
                 \x y z -> composition (One (x :: Int)) (Other (++ (y :: String))) (z :: OneOrOther Int String)
             testHomomorphism $ \x y -> (pure (* x) <*> pure y) == (pure (x * y) :: OneOrOther String Int)
             testInterchange $ \x y -> interchange (One (x :: Int)) (y :: Int)
+
+        context "S" $ do
+            testIdentity (\x -> identity (x :: S Maybe Int))
+            testComposition (\x -> composition (S (Just (+ x)) (+ x)) (S (Just (* x)) (* x)) (S (Just x) (x :: Int)))
+            testHomomorphism $ \x y -> (pure (* (x :: Int)) <*> pure (y :: Int)) == (pure (x * y) :: S Maybe Int)
+            testInterchange (\x y -> interchange (S (Just (+ x)) (+ (x :: Int))) (y :: Int))

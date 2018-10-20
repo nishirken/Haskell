@@ -1,5 +1,8 @@
 module FoldableUtils where
 
+import Data.Maybe (fromMaybe)
+import Data.Semigroup (Min (..), getMin, Max (..), getMax)
+
 mySum :: (Foldable t, Num a) => t a -> a
 mySum = foldr (+) 0
 
@@ -9,12 +12,11 @@ myProduct = foldr (*) 1
 myElem :: (Foldable t, Eq a) => a -> t a -> Bool
 myElem x = any (== x)
 
--- myMinimum :: (Foldable t, Ord a) => t a -> a
--- myMinimum = fromMaybe (errorWithoutStackTrace "minimum with empty structure") $ getMin $
---     foldMap (Min Just)
+myMinimum :: (Bounded a, Ord a, Foldable t) => t a -> a
+myMinimum x = getMin $ foldMap Min x
 
--- myMaximum :: (Foldable t, Ord a) => t a -> a
--- myMaximum = getMax $ foldMap Max
+myMaximum :: (Bounded a, Ord a, Foldable t) => t a -> a
+myMaximum x = getMax $ foldMap Max x
 
 myNull :: (Foldable t) => t a -> Bool
 myNull = foldr (\_ _ -> False) True
