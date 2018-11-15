@@ -20,6 +20,8 @@ dependencies:
 - MissingH
 - split
 - mtl
+- random
+- transformers
 
 library:
   source-dirs: src
