@@ -13,6 +13,7 @@ import Test.QuickCheck (
     , oneof
     )
 import Test.QuickCheck.Checkers (EqProp, (=-=), eq)
+import Test.QuickCheck.Function (Fun (..), Function, apply)
 import Control.Monad (liftM, liftM2)
 
 import MyData.Identity
@@ -26,6 +27,7 @@ import MyData.List
 import MyData.OneOrOther
 import MyData.S
 import MyData.Tree
+import Chapter22 (Reader (..))
 
 instance Arbitrary a => Arbitrary (Identity a) where
     arbitrary = Identity <$> arbitrary
@@ -107,3 +109,6 @@ instance Arbitrary a => Arbitrary (Tree a) where
 
 instance Eq a => EqProp (Tree a) where
     (=-=) = eq
+
+instance (CoArbitrary r, Arbitrary a) => Arbitrary (Reader r a) where
+    arbitrary = Reader <$> arbitrary

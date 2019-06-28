@@ -16,6 +16,7 @@ import MyData.List
 import MyData.OneOrOther
 import MyData.S
 import MyData.Tree
+import Chapter22 (Reader (..))
 
 type Id functor = functor -> Bool
 
@@ -41,7 +42,7 @@ testInterchange interchangeFn = it "Interchange" $ property interchangeFn
 
 applicativeSpec :: SpecWith ()
 applicativeSpec =
-    describe "Chapter17 Applicative" $ do
+    describe "Applicative" $ do
         context "Identity" $ do
             testIdentity (identity :: Id (Identity Int))
             testComposition $
@@ -124,3 +125,22 @@ applicativeSpec =
             testComposition (\x -> composition (S (Just (+ x)) (+ x)) (S (Just (* x)) (* x)) (S (Just x) (x :: Int)))
             testHomomorphism $ \x y -> (pure (* (x :: Int)) <*> pure (y :: Int)) == (pure (x * y) :: S Maybe Int)
             testInterchange (\x y -> interchange (S (Just (+ x)) (+ (x :: Int))) (y :: Int))
+
+        context "Reader" $ do
+            let
+                readerComposition ::
+                    String ->
+                    Reader String (String -> Int) ->
+                    Reader String (Char -> String) ->
+                    Reader String Char ->
+                    Bool
+                readerComposition x f f' f'' =
+                    (runReader $ pure (.) <*> f <*> f' <*> f'') x == (runReader $ f <*> (f' <*> f'')) x
+            testIdentity (\x y -> runReader (pure id <*> (x :: Reader String Int)) (y :: String) == (runReader x) y)
+            testComposition readerComposition
+            testHomomorphism $ \x y z f ->
+                (runReader $ pure ((f :: Int -> Int -> Int) (x :: Int)) <*> pure (y :: Int)) (z :: String) ==
+                    (runReader (pure (f x y) :: Reader String Int)) z
+            testInterchange $ \x y f ->
+                (runReader $ (f :: Reader String (Int -> Int)) <*> pure (x :: Int)) (y :: String) ==
+                    (runReader $ pure ($ x) <*> f) y

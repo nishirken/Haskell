@@ -9,6 +9,7 @@ import MyData.Nope
 import MyData.Identity
 import MyData.OneOrOther
 import MyData.List
+import Chapter22 (Reader (..))
 import MonadUtils (j, l1, l2, a, meh, flipType)
 
 leftIdentity :: (Eq (m b), Monad m) => a -> (a -> m b) -> Bool
@@ -31,7 +32,7 @@ instance Arbitrary a => Arbitrary (Nope a) where
 
 monadSpec :: SpecWith ()
 monadSpec =
-  describe "Chapter18 Monad" $ do
+  describe "Monad" $ do
     context "Nope" $ do
       testLeftIdentity (\x -> leftIdentity (x :: Int) (const NopeDotJpg))
       testRightIdentity (\x -> rightIdentity (x :: Nope Int))
@@ -52,6 +53,26 @@ monadSpec =
       testRightIdentity (\x -> rightIdentity (x :: List Int))
       modifyMaxSize (const 20) $
         testAssoc (\x y z -> assoc (x :: List Int) (\_ -> y :: List Int) (\_ -> z :: List Int))
+    
+    context "Reader" $ do
+      testLeftIdentity (\x y f ->
+        (runReader $ return (x :: Int) >>= (f :: Int -> Reader String Int)) (y :: String) == (runReader $ f x) y)
+      testRightIdentity (\x m -> (runReader $ (m :: Reader String Int) >>= return) (x :: String) == (runReader m) x)
+      let
+        leftAssoc ::
+          Reader String Int ->
+          (Int -> Reader String Char) ->
+          (Char -> Reader String Float) ->
+          Reader String Float
+        leftAssoc m f g = m >>= f >>= g
+      let
+        rightAssoc ::
+          Reader String Int ->
+          (Int -> Reader String Char) ->
+          (Char -> Reader String Float) ->
+          Reader String Float
+        rightAssoc m f g = m >>= (\x -> f x >>= g)
+      testAssoc $ \m f g x -> (runReader (leftAssoc m f g)) (x :: String) == (runReader (rightAssoc m f g)) x
 
     context "j util" $ do
       it "Works with List" $ j [[1, 2], [3]] `shouldBe` [1, 2, 3]

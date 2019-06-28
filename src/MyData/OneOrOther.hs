@@ -15,7 +15,6 @@ instance Applicative (OneOrOther a) where
     (One f) <*> _ = One f
     (Other f) <*> (Other x) = Other (f x)
 
-
 instance Monad (OneOrOther a) where
     return = pure
     (One x) >>= _ = One x

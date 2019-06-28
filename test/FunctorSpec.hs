@@ -25,6 +25,7 @@ import MyData.List
 import MyData.GoatLord
 import MyData.S
 import MyData.Tree
+import Chapter22 (Reader (..))
 
 type Id x = x -> Bool
 
@@ -40,7 +41,7 @@ testComposition f = it "Composition" $ property f
 
 functorSpec :: SpecWith ()
 functorSpec =
-    describe "Chapter16 Functor" $ do
+    describe "Functor" $ do
         context "Identity" $ do
             testIdentity (identity :: (Id (Identity Int)))
             testComposition $ \x y -> composition (x :: Identity Int) (+ (y :: Int)) (* y)
@@ -172,3 +173,11 @@ functorSpec =
         context "Tree" $ do
             testIdentity $ (\x -> identity (x :: Tree Int))
             testComposition $ \x y -> composition (x :: Tree Int) (+ (y :: Int)) (* y)
+
+        context "Reader" $ do
+            testIdentity $ (\x y ->
+                (runReader $ id <$> (x :: Reader String Int)) (y :: String) == (runReader $ id x) y)
+            testComposition $ \x y f g ->
+                (runReader $
+                    fmap ((g :: Char -> Int) . (f :: String -> Char)) (x :: Reader String String)) (y :: String)
+                    == (runReader (fmap g . fmap f $ x)) y

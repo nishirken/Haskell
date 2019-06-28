@@ -8,6 +8,7 @@ import ApplicativeSpec (applicativeSpec)
 import MonadSpec (monadSpec)
 import FoldableSpec (foldableSpec)
 import TraversableSpec (traversableSpec)
+import Chapter22Spec (chapter22Spec)
 
 main :: IO ()
 main = hspec $ do
@@ -36,3 +37,4 @@ main = hspec $ do
     monadSpec
     foldableSpec
     traversableSpec
+    chapter22Spec
