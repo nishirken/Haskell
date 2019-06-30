@@ -51,3 +51,37 @@ instance Applicative (Reader r) where
 
 instance Monad (Reader r) where
   (Reader ra) >>= f = Reader $ \r -> (runReader $ f (ra r)) r
+
+newtype HumanName = HumanName String deriving (Eq, Show)
+
+newtype DogName   = DogName String deriving (Eq, Show)
+
+newtype Address = Address String deriving (Eq, Show)
+
+data Person =
+  Person
+    { humanName :: HumanName
+    , dogName :: DogName
+    , address :: Address
+    } deriving (Eq, Show)
+
+data Dog =
+  Dog
+    { dogsName :: DogName
+    , dogsAddress :: Address
+    } deriving (Eq, Show)
+
+chris :: Person
+chris = Person (HumanName "Chris Allen") (DogName "Papu") (Address "Austin")
+
+getDogRM :: Person -> Dog
+getDogRM = do
+  name <- dogName
+  addy <- address
+  return $ Dog name addy
+
+getDogRM' :: Reader Person Dog
+getDogRM' = do
+  name <- Reader $ \person -> dogName person
+  addy <- Reader $ \person -> address person
+  return $ Dog name addy
