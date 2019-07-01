@@ -28,6 +28,7 @@ import MyData.OneOrOther
 import MyData.S
 import MyData.Tree
 import Chapter22 (Reader (..))
+import Chapter23 (State (..))
 
 instance Arbitrary a => Arbitrary (Identity a) where
     arbitrary = Identity <$> arbitrary
@@ -112,3 +113,8 @@ instance Eq a => EqProp (Tree a) where
 
 instance (CoArbitrary r, Arbitrary a) => Arbitrary (Reader r a) where
     arbitrary = Reader <$> arbitrary
+
+instance (CoArbitrary s, Arbitrary a) => Arbitrary (State s a) where
+    arbitrary = do
+        x <- arbitrary
+        pure $ State $ \s -> (x, s)

@@ -26,6 +26,7 @@ import MyData.GoatLord
 import MyData.S
 import MyData.Tree
 import Chapter22 (Reader (..))
+import Chapter23 (State (..))
 
 type Id x = x -> Bool
 
@@ -181,3 +182,11 @@ functorSpec =
                 (runReader $
                     fmap ((g :: Char -> Int) . (f :: String -> Char)) (x :: Reader String String)) (y :: String)
                     == (runReader (fmap g . fmap f $ x)) y
+
+        context "State" $ do
+            testIdentity $ (\x y ->
+                (runState $ id <$> (x :: State String Int)) (y :: String) == (runState $ id x) y)
+            testComposition $ \x y f g ->
+                (runState $
+                    fmap ((g :: Char -> Int) . (f :: String -> Char)) (x :: State String String)) (y :: String)
+                    == (runState (fmap g . fmap f $ x)) y

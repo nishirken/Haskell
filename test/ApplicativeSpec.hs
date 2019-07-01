@@ -17,6 +17,7 @@ import MyData.OneOrOther
 import MyData.S
 import MyData.Tree
 import Chapter22 (Reader (..))
+import Chapter23 (State (..))
 
 type Id functor = functor -> Bool
 
@@ -144,3 +145,22 @@ applicativeSpec =
             testInterchange $ \x y f ->
                 (runReader $ (f :: Reader String (Int -> Int)) <*> pure (x :: Int)) (y :: String) ==
                     (runReader $ pure ($ x) <*> f) y
+
+        context "State" $ do
+            let
+                stateComposition ::
+                    String ->
+                    State String (String -> Int) ->
+                    State String (Char -> String) ->
+                    State String Char ->
+                    Bool
+                stateComposition x f f' f'' =
+                    (runState $ pure (.) <*> f <*> f' <*> f'') x == (runState $ f <*> (f' <*> f'')) x
+            testIdentity (\x y -> runState (pure id <*> (x :: State String Int)) (y :: String) == (runState x) y)
+            testComposition stateComposition
+            testHomomorphism $ \x y z f ->
+                (runState $ pure ((f :: Int -> Int -> Int) (x :: Int)) <*> pure (y :: Int)) (z :: String) ==
+                    (runState (pure (f x y) :: State String Int)) z
+            testInterchange $ \x y f ->
+                (runState $ (f :: State String (Int -> Int)) <*> pure (x :: Int)) (y :: String) ==
+                    (runState $ pure ($ x) <*> f) y
