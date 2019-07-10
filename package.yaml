@@ -17,6 +17,7 @@ description:         Please see the README on Github at <https://github.com/gith
 
 dependencies:
 - base
+- trifecta
 - MissingH
 - split
 
