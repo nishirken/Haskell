@@ -20,6 +20,10 @@ dependencies:
 - trifecta
 - MissingH
 - split
+- text
+- bytestring
+- raw-strings-qq
+- containers
 
 library:
   source-dirs: src
