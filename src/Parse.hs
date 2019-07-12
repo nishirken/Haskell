@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE QuasiQuotes #-}
 
 module Parse where
 
@@ -10,7 +9,13 @@ import Data.Char (isAlpha)
 import Data.Text (Text)
 import qualified Data.Map as M
 import qualified Data.Text.IO as TextIO
-import Text.RawString.QQ
+
+data IniSection = IniSection
+  { _headers :: [Header]
+  , _assignments :: Assignments
+  } deriving (Eq, Show)
+
+type IniConfig = [IniSection]
 
 newtype Header = Header String deriving (Eq, Ord, Show)
 
@@ -18,7 +23,10 @@ parseBracketPair :: Parser a -> Parser a
 parseBracketPair p = char '[' *> p <* char ']'
 
 parseHeader :: Parser Header
-parseHeader = parseBracketPair (Header <$> some letter)
+parseHeader = do
+  header <- parseBracketPair (Header <$> some (alphaNum <|> char '.'))
+  skipWhitespace
+  pure header
 
 type Name = String
 type Value = String
@@ -28,43 +36,27 @@ parseAssignment :: Parser (Name, Value)
 parseAssignment = do
   name <- some letter
   char '='
-  val <- some (noneOf "\n")
-  skipEOL
+  val <- some (noneOf "\t \n")
+  skipWhitespace
   pure (name, val)
-
-skipEOL :: Parser ()
-skipEOL = skipMany (oneOf "\n")
-
-commentEx :: ByteString
-commentEx =
-  "; last modified 1 April\
-  \ 2001 by John Doe"
-
-commentEx' :: ByteString
-commentEx' =
-  "; blah\n; woot\n  \n;hah"
 
 skipComments :: Parser ()
 skipComments =
   skipMany $ do
     char ';' <|> char '#'
     skipMany (noneOf "\n")
-    skipEOL
 
-sectionEx :: ByteString
-sectionEx =
-  "; ignore me\n[states]\nChris=Texas"
+skipWhitespace :: Parser ()
+skipWhitespace = skipMany (char '\t' <|> char ' ' <|> char '\n')
 
-sectionEx' :: ByteString
-sectionEx' = [r|
-  ; ignore me
-  [states]
-  Chris=Texas
-  |]
+parseSection :: Parser IniSection
+parseSection = do
+  skipWhitespace
+  skipComments
+  skipWhitespace
+  headers <- some parseHeader
+  assignments <- some parseAssignment
+  pure $ IniSection headers (M.fromList assignments)
 
-sectionEx'' :: ByteString
-sectionEx'' = [r|
-  ; comment
-  [section] host=wikipedia.org alias=claw
-  [whatisit] red=intoothandclaw
-  |]
+parseIni :: Parser IniConfig
+parseIni = some parseSection
