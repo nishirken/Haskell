@@ -52,3 +52,29 @@ semverSpec = describe "Semver parsing" $ do
     it "with release" $ do
       let expect = Semver (Version 1 0 0) [NOSS "beta"] [NOSS "exp", NOSS "sha", NOSS "5114f85", NOSI 0, NOSI 1]
       parse semverParser "" "1.0.0-beta+exp.sha.5114f85-0.1" `shouldBe` Right expect
+
+  context "Ordering" $ do
+    it "major" $ Semver (Version 1 0 0) [] [] < Semver (Version 2 0 0) [] []
+    it "minor" $ Semver (Version 2 0 0) [] [] < Semver (Version 2 1 0) [] []
+    it "patch" $ Semver (Version 2 1 1) [] [] > Semver (Version 2 1 0) [] []
+    let
+      alpha = Semver (Version 1 0 0) [NOSS "alpha"] []
+      alpha1 = Semver (Version 1 0 0) [NOSS "alpha", NOSI 1] []
+      alphaBeta = Semver (Version 1 0 0) [NOSS "alpha", NOSS "beta"] []
+      beta = Semver (Version 1 0 0) [NOSS "beta"] []
+      beta2 = Semver (Version 1 0 0) [NOSS "beta", NOSI 2] []
+      beta11 = Semver (Version 1 0 0) [NOSS "beta", NOSI 11] []
+      rc = Semver (Version 1 0 0) [NOSS "rc", NOSI 11] []
+    it "release 1" $ alpha < alpha1
+    it "release 2" $ alpha1 < alphaBeta
+    it "release 3" $ alphaBeta < beta
+    it "release 4" $ beta < beta2
+    it "release 5" $ beta2 < rc
+    it "release 6" $ beta2 < rc
+    it "release 7" $ rc < Semver (Version 1 0 0) [] []
+    
+    it "metadata 1" $ Semver (Version 1 0 0) [] [NOSI 1] == Semver (Version 1 0 0) [] []
+    it "metadata 2" $ Semver (Version 1 0 0) [NOSS "alpha"] [NOSI 1] == Semver (Version 1 0 0) [NOSS "alpha"] []
+    it "metadata 3" $
+      Semver (Version 1 0 0) [NOSS "alpha"] [NOSS "exp", NOSS "sha", NOSS "5114f85"] ==
+      Semver (Version 1 0 0) [NOSS "alpha"] []
