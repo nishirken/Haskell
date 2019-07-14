@@ -10,6 +10,7 @@ import FoldableSpec (foldableSpec)
 import TraversableSpec (traversableSpec)
 import ParseSpec (parseSpec)
 import SemverSpec (semverSpec)
+import PhoneParseSpec (phoneParseSpec)
 
 main :: IO ()
 main = hspec $ do
@@ -40,3 +41,4 @@ main = hspec $ do
     traversableSpec
     parseSpec
     semverSpec
+    phoneParseSpec
