@@ -13,6 +13,19 @@ phoneParseSpec = describe "Phone parsing" $ do
     sixLengthPhone = RussianPhone 343 254413
     fiveLengthPhone = RussianPhone 343 24413
 
+  context "single digit" $ do
+    it "without anything" $ parse digits "" "1" `shouldBe` Right "1"
+    it "with -" $ parse digits "" "-1-" `shouldBe` Right "1"
+    it "with spaces" $ parse digits "" " 1 " `shouldBe` Right "1"
+
+  context "two digits" $ do
+    it "without anything" $ parse digits "" "22" `shouldBe` Right "22"
+    it "with -" $ parse digits "" "-22-" `shouldBe` Right "22"
+    it "with spaces" $ parse digits "" " 22 " `shouldBe` Right "22"
+
+  it "digits together" $
+    parse (concatDigitsChunks 2) "" "-2 44" `shouldBe` Right "244"
+
   context "all -" $ do
     it "7 length" $ parse phoneParser "" "8-343-255-44-13" `shouldBe` Right sevenLengthPhone
     it "6 length" $ parse phoneParser "" "8-343-25-44-13" `shouldBe` Right sixLengthPhone
@@ -64,5 +77,5 @@ phoneParseSpec = describe "Phone parsing" $ do
   context "messy" $ do
     it "first" $ parse phoneParser "" "8 -343   2554413" `shouldBe` Right sevenLengthPhone
     it "second" $ parse phoneParser "" "8(343)-255 44   -13" `shouldBe` Right sevenLengthPhone
-    it "third" $ parse phoneParser "" "8-343- 5 4413" `shouldBe` Right fiveLengthPhone
-    it "fourth" $ parse phoneParser "" "8343 5 4413" `shouldBe` Right fiveLengthPhone
+    it "third" $ parse phoneParser "" "8-343- 2 4413" `shouldBe` Right fiveLengthPhone
+    it "fourth" $ parse phoneParser "" "8343 2 4413" `shouldBe` Right fiveLengthPhone
